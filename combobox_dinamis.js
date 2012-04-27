@@ -21,7 +21,7 @@ function DinamisTable(combobox,id)
 
 
 	if (!kode) return;
-    xmlhttp.open('get', 'load_data.php?kode='+kode+'&table='+table+'&id_table='+id_table, true); //panggil file get field.php
+    xmlhttp.open('get', './func/filter_func.php?kode='+kode+'&table='+table+'&id_table='+id_table, true); //panggil file get field.php
     xmlhttp.onreadystatechange = function() {
         if ((xmlhttp.readyState == 4) && (xmlhttp.status == 200))
         {
@@ -41,7 +41,7 @@ function DinamisField(combobox,id)
         var id_field = document.getElementById('fieldSelect_'+id).id;
 	//alert(kode);
 	if (!kode) return;
-    	xmlhttp.open('get', 'controller/function_select.php?kode='+kode+'&field='+field+'&id_field='+id_field, true);
+    	xmlhttp.open('get', './func/filter_func.php?kode='+kode+'&field='+field+'&id_field='+id_field, true);
 	xmlhttp.onreadystatechange = function() {
         if ((xmlhttp.readyState == 4) && (xmlhttp.status == 200))
         {
@@ -66,7 +66,7 @@ function DinamisCompare(combobox,id)
 
 	//alert (compare);
     if (!kode) return;
-    xmlhttp.open('get', 'controller/function_select.php?kode='+kode+'&table='+table+'&field='+field+'&compare='+compare+'&id_compare='+id_compare, true);
+    xmlhttp.open('get', './func/filter_func.php?kode='+kode+'&table='+table+'&field='+field+'&compare='+compare+'&id_compare='+id_compare, true);
     xmlhttp.onreadystatechange = function() {
         if ((xmlhttp.readyState == 4) && (xmlhttp.status == 200))
         {
