@@ -2,7 +2,7 @@
 session_start();
 define('_IBIS', TRUE);
 
-include 'database.php'; 
+include 'database_template.php'; 
 include 'func/references_func.php';
 include 'session_list.php';
 include 'func/filter_func.php';
