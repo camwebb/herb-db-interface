@@ -2,7 +2,7 @@
 
 <title>Filter</title>
 
-
+	<form name="form_filter" method="POST" action="">
 
 			<table border="0" align="center">
 				<td>
@@ -16,7 +16,7 @@
 						<td width="200" align="center" bgcolor="#ffffff">Data</td>
 					</tr>
 					<tr>
-						<form name="form1" method="POST" action="">
+					
 
 						<input type="hidden" name="page" value="specimen" />
 						<input type="hidden" name="pid" value="1" />
@@ -27,7 +27,7 @@
 								<tr>
 									<td>
 
-									<select name="operator" id="operator_<?php echo $i?>">
+									<select name="operator_<?php echo $i?>" id="operator_<?php echo $i?>">
 										<option value=""></option>
 										<option value="and">AND</option>
 										<option value="or">OR</option>
@@ -35,7 +35,7 @@
 									</td>
 									<td>
                                                                            
-										<select name='table'  class="combobox" id="table_<?php echo $i;?>" onChange="DinamisTable(document.getElementById('table_<?php echo $i?>'),document.getElementById('<?php echo $i?>'))">
+										<select name='table_<?php echo $i?>'  class="combobox" id="table_<?php echo $i;?>" onChange="DinamisTable(document.getElementById('table_<?php echo $i?>'),document.getElementById('<?php echo $i?>'))">
 											<option value=""></option>
                                              <?php get_table();?>
 										</select>
@@ -43,23 +43,19 @@
 									</td>
 									<td>
                                                                              
-										<select class="combobox" name='field' id='fieldSelect_<?php echo $i?>' onChange="DinamisField(document.getElementById('fieldSelect_<?php echo $i?>'),document.getElementById('<?php echo $i?>'))">
-											<option value=""></option>
-
+										<select class="combobox" name='field_<?php echo $i?>' id='fieldSelect_<?php echo $i?>' onChange="DinamisField(document.getElementById('fieldSelect_<?php echo $i?>'),document.getElementById('<?php echo $i?>'))">
 										</select>
                                                                            
 									</td>
 									<td>
                                                                             
-										<select class="combobox" name='compare' id='compareSelect_<?php echo $i?>' onChange="DinamisCompare(document.getElementById('compareSelect_<?php echo $i?>'),document.getElementById('<?php echo $i?>'))">
-											<option value=""></option>
+										<select class="combobox" name='compare_<?php echo $i?>' id='compareSelect_<?php echo $i?>' onChange="DinamisCompare(document.getElementById('compareSelect_<?php echo $i?>'),document.getElementById('<?php echo $i?>'))">
 										</select>
                                                                             
 									</td>
 									<td>
                                                                             
-										<select class="combobox" name='data' id='dataSelect_<?php echo $i?>' onChange="DinamisData(document.getElementById('dataSelect_<?php echo $i?>'),document.getElementById('<?php echo $i?>'))">
-											<option value=""></option>
+										<select class="combobox" name='data_<?php echo $i?>' id='dataSelect_<?php echo $i?>' onChange="DinamisData(document.getElementById('dataSelect_<?php echo $i?>'),document.getElementById('<?php echo $i?>'))">
 										</select>
                                                                                 
 									</td>
@@ -68,7 +64,7 @@
 
 						</div>
 						<?php }?>
-						</form>
+						
 					</tr>
 
 
@@ -91,5 +87,5 @@
 	<input type='hidden' id='dataTmp' name='dataTmp' value="" />
 </div>
 
-
+</form>
 
