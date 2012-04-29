@@ -1,6 +1,6 @@
 <?php
 //open connection (belum fix) seharusnya diloading oleh index.php
-include './database_template.php';
+include './database.php';
 
 //seleksi combobox apa yang sedang dipilih
 if (isset ($_GET['data'])){ 
