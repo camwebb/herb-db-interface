@@ -1,8 +1,6 @@
 <?php
-//open connection (belum fix) seharusnya diloading oleh index.php
-include './database.php';
+include '../database.php';
 
-//seleksi combobox apa yang sedang dipilih
 if (isset ($_GET['data'])){ 
 	
 	//get_data(array ('id_field' => $_GET['field']));
@@ -14,13 +12,12 @@ if (isset ($_GET['data'])){
 					'id_compare' => $_GET['id_compare']
 					)
 					);
-}else if (isset ($_GET['field'])){
+}else if (isset ($_GET['field'])){ 
 	get_compare(array ('id_field' => $_GET['kode']));
-}else if (isset ($_GET['table'])){
+}else if (isset ($_GET['table'])){ 
 	get_field(array ('id_table' => $_GET['kode']));
 }
 
-//load data pada table view_table
 function get_table(){
 	$query = "SELECT * FROM view_table";
 	$result = mysql_query($query) or die (mysql_error);
@@ -31,7 +28,6 @@ function get_table(){
 	}
 }
 
-//load data pada table view_field
 function get_field($dataTable){
 	$query = "SELECT * FROM view_field WHERE ID_Table = '" .$dataTable['id_table']. "'"; //print_r($query);
 	$result = mysql_query($query) or die (mysql_error);
@@ -43,7 +39,6 @@ function get_field($dataTable){
 	} 
 }
 
-//load data pada table view_field untuk field COMPARE
 function get_compare($dataCompare){
 	$query = "SELECT Compares FROM view_field WHERE ID_Field = '". $dataCompare['id_field']."'";//print_r($query);
 	$result = mysql_query($query) or die (mysql_error);
@@ -58,7 +53,6 @@ function get_compare($dataCompare){
 	}
 }
 
-//load data pada table view_table untuk field FromTable
 function get_data($dataData){ 
 	$query = "SELECT * FROM view_field WHERE ID_Field = '".$dataData['id_field']."'"; //print_r($query);
 	$result = mysql_query($query) or die (mysql_error);
@@ -83,4 +77,6 @@ function get_data($dataData){
 	
 	
 }
+
+
 ?>
