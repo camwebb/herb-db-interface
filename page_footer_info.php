@@ -1,18 +1,18 @@
 
 
 <fieldset style="padding: 0px 0px 0px 0px; margin-bottom: 5px">
-<table border="0" width="700">
+<table border="0" width="700" style="font-size:10px">
 			<tr>
-				<td width="70" class="user_info_text">Current User</td>
-				<td class="user_info_value">: <?php echo $Current_User?></td>
+				<td width="100" class="user_info_text">Current User</td>
+				<td class="user_info_value" width="150">: <?php echo $Current_User?></td>
 
-				<td width="90" class="user_info_text">Edited By</td>
-                                <td class="user_info_value">: <?php echo $Last_Edited_By?></td>
+				<td width="130" class="user_info_text">Edited By</td>
+                <td class="user_info_value" width="170">: <?php echo $Last_Edited_By?></td>
 				<td align="right">
 				Data Value :
 				<select name="Data_Value" class="_combobox">
 					<option></option>
-					<?php //load_id('xData_Value', 'ID', 'Text')?>
+					<?php load_id('xData_Value', 'ID', 'Text')?>
                                 </select>
                                 </td>
 			</tr>
@@ -28,7 +28,7 @@
 				<td class="user_info_text">Start Logon</td>
 				<td class="user_info_value">: <?php echo $Start_Logon?></td>
 
-				<td class="user_info_text">Last Edited Date</td>
+				<td class="user_info_text" width="130">Last Edited Date</td>
                                 <td class="user_info_value">: <?php echo $Last_Edited_Date?></td>
 				<td></td>
 			</tr>
