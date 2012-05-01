@@ -1,8 +1,60 @@
-<?php defined('_IBIS') or die ('Forbidden Access');?>
+<?php defined('_IBIS') or die ('Forbidden Access');
+
+
+	if (isset($_POST['apply'])){
+		$get_record = array (
+							'operator_1' => $_POST['operator_1'],
+							'operator_2' => $_POST['operator_2'],
+							'operator_3' => $_POST['operator_3'],
+							'operator_4' => $_POST['operator_4'],
+							'table_0' => $_POST['table_0'],
+							'table_1' => $_POST['table_1'],
+							'table_2' => $_POST['table_2'],
+							'table_3' => $_POST['table_3'],
+							'table_4' => $_POST['table_4'],
+							'field_0' => $_POST['field_0'],
+							'field_1' => $_POST['field_1'],
+							'field_2' => $_POST['field_2'],
+							'field_3' => $_POST['field_3'],
+							'field_4' => $_POST['field_4'],
+							'compare_0' => $_POST['compare_0'],
+							'compare_1' => $_POST['compare_1'],
+							'compare_2' => $_POST['compare_2'],
+							'compare_3' => $_POST['compare_3'],
+							'compare_4' => $_POST['compare_4'],
+							'data_0' => $_POST['data_0'],
+							'data_1' => $_POST['data_1'],
+							'data_2' => $_POST['data_2'],
+							'data_3' => $_POST['data_3'],
+							'data_4' => $_POST['data_4'],
+							);
+		
+		list ($rec, $specimenID) = get_data_from_table($get_record);
+		
+		$_SESSION['specimenID_Filter'] = $specimenID;
+		
+		//print_r($specimenID);
+//		$getDataFromTable = get_data_from_table($get_record);
+		if($rec > 0) echo '<script>window.onload = function (){alert ("'.$rec.' ada data") ; window.location="./?page=specimen"}</script>';
+		else echo '<script>window.onload = function (){alert ("tidak ada data") ;window.location="./?page=filter"}</script>';
+		//header('location:./?page=specimen');
+		
+		
+	}else if (isset($_POST['remove_filter'])){
+		unset($_SESSION['specimenID_Filter']);
+		
+		header('location:./?page=filter');
+		//echo '<script>window.onload = function (){alert ("Filter sudah dibersihkan") ;window.location = "./#tabs-2"}</script>';
+	}
+	
+	//print_r( $_SESSION['specimenID_Filter']);
+	
+?>
+
 
 <title>Filter</title>
 
-	<form name="form_filter" method="POST" action="">
+<form method="post" action="" name="from_filter" onsubmit="return validasi_filter()">
 
 			<table border="0" align="center">
 				<td>
@@ -16,7 +68,7 @@
 						<td width="200" align="center" bgcolor="#ffffff">Data</td>
 					</tr>
 					<tr>
-					
+						
 
 						<input type="hidden" name="page" value="specimen" />
 						<input type="hidden" name="pid" value="1" />
@@ -26,12 +78,13 @@
 						<input type="hidden" id="<?php echo $i ?>" name="<?php echo $i ?>" value ="<?php echo $i ?>" />
 								<tr>
 									<td>
-
+									<?php if ($i !== 0):?>
 									<select name="operator_<?php echo $i?>" id="operator_<?php echo $i?>">
 										<option value=""></option>
-										<option value="and">AND</option>
-										<option value="or">OR</option>
+										<option value="AND">AND</option>
+										<option value="OR">OR</option>
 									</select>
+									<?php endif; ?>
 									</td>
 									<td>
                                                                            
@@ -44,18 +97,22 @@
 									<td>
                                                                              
 										<select class="combobox" name='field_<?php echo $i?>' id='fieldSelect_<?php echo $i?>' onChange="DinamisField(document.getElementById('fieldSelect_<?php echo $i?>'),document.getElementById('<?php echo $i?>'))">
+											
+
 										</select>
                                                                            
 									</td>
 									<td>
                                                                             
 										<select class="combobox" name='compare_<?php echo $i?>' id='compareSelect_<?php echo $i?>' onChange="DinamisCompare(document.getElementById('compareSelect_<?php echo $i?>'),document.getElementById('<?php echo $i?>'))">
+											
 										</select>
                                                                             
 									</td>
 									<td>
                                                                             
 										<select class="combobox" name='data_<?php echo $i?>' id='dataSelect_<?php echo $i?>' onChange="DinamisData(document.getElementById('dataSelect_<?php echo $i?>'),document.getElementById('<?php echo $i?>'))">
+											
 										</select>
                                                                                 
 									</td>
@@ -63,7 +120,7 @@
 								</tr>
 
 						</div>
-						<?php }?>
+						<?php } ?>
 						
 					</tr>
 
@@ -86,6 +143,4 @@
 	<input type='hidden' id='compareTmp' name='compareTmp' value="" />
 	<input type='hidden' id='dataTmp' name='dataTmp' value="" />
 </div>
-
 </form>
-
