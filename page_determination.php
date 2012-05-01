@@ -23,21 +23,21 @@ function taxon_list(url) {
 	<table border="0" width="700">
             <td>
                 <!--table konten 1-->
-		<table width="690" border="0">
+		<table width="100%" border="0">
                     <tr>
-                        <td width="90" align="right">Determiner BY </td>
+                        <td width="100" align="right">Determiner BY </td>
 			<td width="100">
                             <input type="text" name="textfield" />
 			</td>
-			<td width="80" align="right">Date</td>
-			<td width="100">
+			<td width="" align="right">Date</td>
+			<td width="">
                             <input type="text" name="textfield3" size="10"/>
 			</td>
-			<td width="150" align="right">Determination Qualifier </td>
-			<td>
+			<td width="" align="right">Determination Qualifier </td>
+			<td width="150">
                             <select name="select" >
                                 <option value=""></option>
-                                <?php //load_id('xQualifier', 'ID', 'Text')?>
+                                <?php load_id('xQualifier', 'ID', 'Text')?>
                             </select>
 			</td>
                     </tr>
@@ -80,7 +80,7 @@ function taxon_list(url) {
                                     if($_GET['pid']){
                                     ?>
                                     <select name="genus" id="genus" onChange='DinamisGenus(this)' class="combobox">
-                                        <?php //get_genus($Family_Code, $Genus_Code);
+                                        <?php get_genus($Family_Code, $Genus_Code);
                                         ?>
                                     </select>
                                     <?php
@@ -104,7 +104,7 @@ function taxon_list(url) {
                                     ?>
                                     <select name="species" id="species" onChange='DinamisSpecies(this)' class="combobox">
                                         <option value=""></option>
-                                        <?php //get_species_selected($Genus_Code, $Species_Code);
+                                        <?php get_species_selected($Genus_Code, $Species_Code);
 
                                         ?>
                                     </select>
@@ -129,7 +129,7 @@ function taxon_list(url) {
                                     <select name="author" id="author" onChange='DinamisAuthor(this)' class="combobox">
                                         <option value=""></option>
 
-                                        <?php //get_species_author_selected($Species_Code, $Species_Author_Code);
+                                        <?php get_species_author_selected($Species_Code, $Species_Author_Code);
 
                                         ?>
                                     </select>
@@ -149,7 +149,7 @@ function taxon_list(url) {
 			    </td>
 				<td width="">
 				</td>
-				<td width="400" align="right">
+				<td width="400" align="right" valign="top">
 					<!--tabel 2 sub konten 2-->
 					<table border="1" width="">
 						<tr>
@@ -161,14 +161,14 @@ function taxon_list(url) {
 							<td>
 								<select name="select6" class="combobox">
 								<option></option>
-								<?php //load_id('xRank', 'ID', 'Text')?>
+								<?php load_id('xRank', 'ID', 'Text')?>
 								</select>
 							</td>
 							<td>
-								<input type="text" name="textfield5" size="7" />
+								<input type="text" name="textfield5" size="7" class="max_size"/>
 							</td>
 							<td>
-								<input type="text" name="textfield9" size="7"/>
+								<input type="text" name="textfield9" size="7" class="max_size"/>
 							</td>
 						</tr>
 					</table>
@@ -183,11 +183,11 @@ function taxon_list(url) {
 					<td rowspan="2">
 						<textarea name="textarea" cols="20" rows="" class="max_size"><?php echo $Publication?></textarea>
 					</td>
-					<td align="right" colspan="3" width="130">Informal Group </td>
+					<td align="right" colspan="3" width="">Informal Group </td>
 					<td width="200">
-						<select name="select10" >
+						<select name="select10" style="width:100%">
 						<option></option>
-						<?php //load_id('xInformal_Group', 'ID', 'Text')?>
+						<?php load_id('xInformal_Group', 'ID', 'Text')?>
 						</select>
 					</td>
 				</tr>
