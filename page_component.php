@@ -27,7 +27,7 @@
 						<td>
 							<select name="select" >
                                                             <option value=""></option>
-                                                            <?php //load_id('xComponent_Class', 'ID', 'Text')?>
+                                                            <?php load_id('xComponent_Class', 'ID', 'Text')?>
 							</select>
 						</td>
 					</tr>
