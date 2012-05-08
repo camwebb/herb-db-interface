@@ -1,15 +1,70 @@
-<?php
+<?php 
 defined('_IBIS') or die ('Forbidden Access');
 //print_r($_SESSION['specimenID_Filter']);
 
-
+if (isset($_POST['save_specimen'])){
+	
+	$dataSpecimen = array 
+						(
+							'table_name' => 'Specimen',
+							'field_name' => array (
+													'ID_Specimen' 					=> 'ID_Specimen',
+													'Collector_Field_Number' 		=> 'Collector_Field_Number',
+													'Collector_Name' 				=> 'Collector_Name',
+													'Coll_Date_From' 				=> 'Coll_Date_From',
+													'Coll_Date_To' 					=> 'Coll_Date_To',
+													'Habit_Detail' 					=> 'Habit_Detail',
+													'Origin_of_Collection_Code' 	=> 'Origin_of_Collection_Code',
+													'Status_Code' 					=> 'Status_Code',
+													'Local_Name' 					=> 'Local_Name',
+													'Language' 						=> 'Language',
+													'Local_Use' 					=> 'Local_Use',
+													'Phenology_Code' 				=> 'Phenology_Code',
+													'Sex_Code' 						=> 'Sex_Code',
+													'Notes' 						=> 'Notes',
+													'Collection_Method_Code' 		=> 'Collection_Method_Code',
+													'Distribution_of_Duplicates' 	=> 'Distribution_of_Duplicates',
+													'Type_Code' 					=> 'Type_Code',
+													'Data_Value' 					=> 'Data_Value'	
+												  ),
+												  
+							'field_data' => array (
+													'Collector_Field_Number' 		=> trim(htmlspecialchars($_POST['Collector_Field_Number'])),
+													'Collector_Name' 				=> trim(htmlspecialchars($_POST['Collector_Name'])),
+													'Coll_Date_From' 				=> trim(htmlspecialchars($_POST['Coll_Date_From'])),
+													'Coll_Date_To' 					=> trim(htmlspecialchars($_POST['Coll_Date_To'])),
+													'Habit_Detail' 					=> trim(htmlspecialchars($_POST['Habit_Detail'])),
+													'Origin_of_Collection_Code' 	=> trim(htmlspecialchars($_POST['Origin_of_Collection_Code'])),
+													'Status_Code' 					=> trim(htmlspecialchars($_POST['Status_Code'])),
+													'Local_Name' 					=> trim(htmlspecialchars($_POST['Local_Name'])),
+													'Language' 						=> trim(htmlspecialchars($_POST['Language'])),
+													'Local_Use' 					=> trim(htmlspecialchars($_POST['Local_Use'])),
+													'Phenology_Code' 				=> trim(htmlspecialchars($_POST['Phenology_Code'])),
+													'Sex_Code' 						=> trim(htmlspecialchars($_POST['Sex_Code'])),
+													'Notes' 						=> trim(htmlspecialchars($_POST['Notes'])),
+													'Collection_Method_Code' 		=> trim(htmlspecialchars($_POST['Collection_Method_Code'])),
+													'Distribution_of_Duplicates' 	=> trim(htmlspecialchars($_POST['Distribution_of_Duplicates'])),
+													'Type_Code' 					=> trim(htmlspecialchars($_POST['Type_Code'])),
+													'Data_Value' 					=> trim(htmlspecialchars($_POST['Data_Value']))
+												  )
+							
+							
+						);
+						
+	insert_tab_specimen($dataSpecimen);
+	//masukkan data ke fungsi insert
+}else if (isset($_POST['new_data'])){
+	
+	unset_session_specimen();
+	header ('location:./?page=specimen');
+}
 ?>
 
 <form method="POST" name="specimen" action="">
 
 		<?php require 'page_header_info.php'?>
- <fieldset style="padding: 0px 0px 0px 0px; margin-bottom: 5px">
-		<table border="0">
+ <fieldset style="padding: 0px 0px 0px 0px; margin-bottom: 5px;">
+		<table border="0" width="100%">
 			<tr>
 				<td>
 					<table width="" border="0">
@@ -21,29 +76,27 @@ defined('_IBIS') or die ('Forbidden Access');
 							<td width="" align="right" valign="top">Origin of Collection </td>
 							<td width="170" valign="top" rowspan="">
 								<select name="Origin_of_Collection_Code" size="1" class="combobox">
-                                                                    <option value=""></option>
-                                                                    <?php load_id('xOrigin_of_Collection', 'ID','Text')?>
+									<option value="null"></option>
+                                    <?php load_id('xOrigin_of_Collection', 'ID','Text', $Origin_of_Collection_Code)?>
 								</select>
-                                                        </td>
-                                                </tr>
-                                                <tr>
-
-
+                            </td>
+                        </tr>
+                        <tr>
 
 							<td align="right">Status of Collection </td>
 							<td>
-								<select name="Status_Code1" class="combobox">
-								<option></option>
-								   <?php load_id('xStatus_of_Collection', 'ID', 'Text')?>
+								<select name="Status_Code" class="combobox">
+								<option value="null"></option>
+								   <?php load_id('xStatus_of_Collection', 'ID', 'Text', $Status_Code)?>
 								</select>
 							</td>
-                                                </tr>
+                        </tr>
 
 						<tr>
 							<td align="right">Local Name</td>
 							<td>
 								<input name="Local_Name" type="text" <?php echo $readonly;?> value="<?php echo $Local_Name?>" class="max_size"/>
-                                                        </td>
+                            </td>
 						</tr>
 						<tr>
 							<td align="right">Language</td>
@@ -52,9 +105,9 @@ defined('_IBIS') or die ('Forbidden Access');
 								</td>
 								<td align="right">Status Specimen </td>
 								<td>
-									<select name="Status_Code" class="combobox">
-									<option></option>
-										<?php load_id('xStatus_Specimen', 'ID', 'Text')?>
+									<select name="Phenology_Code" class="combobox">
+									<option value="null"></option>
+										<?php load_id('xPhenology', 'ID', 'Text', $Phenology_Code)?>
 									</select>
 								</td>
 						</tr>
@@ -66,8 +119,8 @@ defined('_IBIS') or die ('Forbidden Access');
 							<td align="right">Sex</td>
 							<td>
 								<select name="Sex_Code" class="combobox">
-								   <option></option>
-									<?php load_id('xSex', 'ID', 'Text')?>
+								   <option value="null"></option>
+									<?php load_id('xSex', 'ID', 'Text', $Sex_Code)?>
 								</select>
 							</td>
 						</tr>
@@ -77,8 +130,8 @@ defined('_IBIS') or die ('Forbidden Access');
 							<td align="right">Collection Method </td>
 							<td>
 								<select name="Collection_Method_Code" class="combobox">
-								   <option></option>
-								   <?php load_id(' xCollection_Method', 'ID', 'Text')?>
+								   <option value="null"></option>
+								   <?php load_id(' xCollection_Method', 'ID', 'Text', $Collection_Method_Code)?>
 								</select>
 
 							</td>
@@ -89,8 +142,8 @@ defined('_IBIS') or die ('Forbidden Access');
 							<td align="right">Type</td>
 							<td>
 								<select name="Type_Code" class="combobox">
-									<option></option>
-									<?php load_id('xType', 'ID', 'Text')?>
+									<option value="null"></option>
+									<?php load_id('xType', 'ID', 'Text', $Type_Code)?>
 								</select>
 							</td>
 						</tr>
@@ -106,5 +159,4 @@ defined('_IBIS') or die ('Forbidden Access');
 <?php require 'page_footer_info.php';?>
 
 </form>
-
 
