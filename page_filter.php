@@ -34,20 +34,23 @@
 		$_SESSION['specimenID_Filter'] = $specimenID;
 		
 		//print_r($specimenID);
-//		$getDataFromTable = get_data_from_table($get_record);
-		if($rec > 0) echo '<script>window.onload = function (){alert ("'.$rec.' ada data") ; window.location="./?page=specimen"}</script>';
-		else echo '<script>window.onload = function (){alert ("tidak ada data") ;window.location="./?page=filter"}</script>';
-		//header('location:./?page=specimen');
+		
+		if($rec > 0) echo '<script>window.onload = function (){alert ("'.$rec.' Data Ditemukan") ; window.location="./?page=specimen&id=1"}</script>';
+		else echo '<script>window.onload = function (){alert ("Data Tidak Ditemukan") ;window.location="./?page=filter"}</script>';
+		
 		
 		
 	}else if (isset($_POST['remove_filter'])){
 		unset($_SESSION['specimenID_Filter']);
+		unset($_SESSION['ID_Specimen']);
+		unset($_SESSION['ID_Determination']);
+		unset($_SESSION['ID_Component']);
+		echo '<script type=text/javascript>alert("Filter Removed"); window.location.href="./?page=filter";</script>"';
 		
-		header('location:./?page=filter');
-		//echo '<script>window.onload = function (){alert ("Filter sudah dibersihkan") ;window.location = "./#tabs-2"}</script>';
+		
 	}
 	
-	//print_r( $_SESSION['specimenID_Filter']);
+	
 	
 ?>
 
@@ -62,10 +65,10 @@
 
 					<tr>
 						<td width="60" align="center" height="30"></td>
-						<td width="110" align="center" bgcolor="#ffffff">Table</td>
-						<td width="150" align="center" bgcolor="#ffffff">Field</td>
+						<td width="130" align="center" bgcolor="#ffffff">Table</td>
+						<td width="" align="center" bgcolor="#ffffff">Field</td>
 						<td width="100" align="center" bgcolor="#ffffff">Compare</td>
-						<td width="200" align="center" bgcolor="#ffffff">Data</td>
+						<td width="300" align="center" bgcolor="#ffffff">Data</td>
 					</tr>
 					<tr>
 						
@@ -79,7 +82,7 @@
 								<tr>
 									<td>
 									<?php if ($i !== 0):?>
-									<select name="operator_<?php echo $i?>" id="operator_<?php echo $i?>">
+									<select name="operator_<?php echo $i?>" id="operator_<?php echo $i?>" class="combobox">
 										<option value=""></option>
 										<option value="AND">AND</option>
 										<option value="OR">OR</option>

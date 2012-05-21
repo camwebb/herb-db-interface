@@ -1,158 +1,82 @@
-<?php 
+<?php
 session_start();
 define('_IBIS', TRUE);
-
-
-
 ?>
-<head>
-    <link rel="stylesheet" type="text/css" href="css/ibis_style.css">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+	<link rel="stylesheet" type="text/css" href="css/ibis_style.css">
+	<link rel="stylesheet" href="css/fancybox.css" />
+	
     <script type="text/JavaScript" src="js/combobox_dinamis.js"></script>
     <script type="text/JavaScript" src="js/form_validation.js"></script>
-    <!--tabs-->
-    <link type="text/css" href="plugin/tabs/css/ui-lightness/jquery-ui-1.8.18.custom.css" rel="stylesheet" />	
-		<script type="text/javascript" src="plugin/tabs/js/jquery-1.7.1.min.js"></script>
-		<script type="text/javascript" src="plugin/tabs/js/jquery-ui-1.8.18.custom.min.js"></script>
-	<!--end tabs-->
-	<!--map-->
-	
-	<!--end map-->
-            <script type="text/javascript" language="javascript">
-            $(function() {
-				$( "#tabs" ).tabs();
+    <script type="text/JavaScript" src="js/jquery/jquery-1.7.1.min.js"></script>
+    <script type="text/JavaScript" src="js/jquery/jquery.fancybox-1.3.4.js"></script>
+     <script type="text/JavaScript" src="js/jquery/jquery.maskedinput-1.2.2.js"></script>
+    <!--fancy box script-->
+    <script type="text/javascript">
+		$(document).ready(function() {
+			$("a#specimen_image").fancybox({
+				'opacity'		: true,
+				'transitionIn'	: 'elastic',
+				'transitionOut'	: 'fade'
 			});
 			
-                
-            </script>
-    <style type="text/css">
-		td : hover{background-color:#ccd;}
-    </style>
-</head>
+		});
+		
+	</script>
+	<!-- masking date -->
+	<script type="text/javascript">
+	jQuery(function($){
+	   $("#Coll_Date_From").mask("9999/99/99");
+	   $("#Coll_Date_To").mask("9999/99/99");
+	});
+</script>
+    <title>
+    <?php 
+		$pageList = array('User', 'Filter', 'Specimen', 'Locality', 'Determination', 'Component', 'Map', 'Report');
+		
+		if (isset($_GET['page'])){
+			if ($_GET['page'] == 'user') echo $pageList[0];else
+			if ($_GET['page'] == 'filter') echo $pageList[1];else
+			if ($_GET['page'] == 'specimen') echo $pageList[2];else
+			if ($_GET['page'] == 'locality') echo $pageList[3];else
+			if ($_GET['page'] == 'determination') echo $pageList[4];else
+			if ($_GET['page'] == 'component') echo $pageList[5];else
+			if ($_GET['page'] == 'map') echo $pageList[6];else
+			if ($_GET['page'] == 'report') echo $pageList[7];
+			
+			$page = $_GET['page'];
+				
+		}else{
+			echo 'Dashboard';
+		}
+		
+     ?>
+    
+    </title>
+  </head>
+  
+<body>
+
 <?php
 
-include 'database.php'; 
-include 'func/references_func.php';
-include 'session_list.php';
-//include 'func/filter_func.php';
-include 'func/filter_search.php';
-include 'func/load_combobox_value.php';
+//include all function here
+require 'database.php'; 
+require 'func/references_func.php'; 
+require 'session_list.php'; 
+require 'func/insert_func.php';
+require 'func/filter_search.php'; 
+require 'func/load_combobox_value.php';
+require 'func/update_func.php';
 
 if (isset($_SESSION['userID'])){
-   
-    //require 'load_combobox_value.php';
-    ?>
-        
-        <div id="container">
-        <div align="right" style="">
-                <fieldset id="info_menu">
-                    Welcome <?php echo $_SESSION['userName']; ?>,
-                    <label><a href="logout.php"> Logout</a></label>
-                   
-                </fieldset>
-                
-            </div>
-        <div>
-            <fieldset  id="menu">
-            <table border="0">
-				<td style="font-size:18px; height:40px; background-color:#cce57f;" align="center"><a href="?page=user" style="text-decoration:none">User</a></td>
-				<td style="font-size:18px; height:40px; background-color:#cce57f;" align="center"><a href="?page=filter" style="text-decoration:none">Filter</a></td>
-				<td style="font-size:18px; height:40px; background-color:#cce57f;" align="center"><a href="?page=specimen" style="text-decoration:none">Specimen</a></td>
-				<td style="font-size:18px; height:40px; background-color:#cce57f;" align="center"><a href="?page=locality" style="text-decoration:none">Locality</a></td>
-				<td style="font-size:18px; height:40px; background-color:#cce57f;" align="center"><a href="?page=determination" style="text-decoration:none">Determination</a></td>
-				<td style="font-size:18px; height:40px; background-color:#cce57f;" align="center"><a href="?page=component" style="text-decoration:none">Component</a></td>
-				<td style="font-size:18px; height:40px; background-color:#cce57f;" align="center"><a href="?page=map" style="text-decoration:none">Map</a></td>
-				<td style="font-size:18px; height:40px; background-color:#cce57f;" align="center"><a href="?page=report" style="text-decoration:none">Report</a></td>
-            </table>
-             
-            </fieldset>
-
-        </div>
-            <?php
-            
-            if (isset($_SESSION['specimenID_Filter'])){
-				$query = "SELECT * FROM Specimen WHERE ID_Specimen = ". $_SESSION['specimenID_Filter'][0];
-				//print_r($query);
-				$result = mysql_query($query) or die (mysql_error);
-				while ($data = mysql_fetch_array($result)){
-					$ID_Specimen = $data['ID_Specimen'];
-					$Collector_Name = $data['Collector_Name'];
-					$Collector_Field_Number =  $data['Collector_Field_Number'];
-					$Coll_Date_From = $data['Coll_Date_From'];
-					$Coll_Date_To = $data['Coll_Date_To'];
-				}
-			}
-				
-            ?>
-            
-            <div id="content">
-                <fieldset style="border-width:0px ">
-                    <?php
-                    if (isset($_GET['page'])){
-						$page = $_GET['page'];
-                        switch ($page)
-                        {
-                            case 'user':
-                            {
-                                require 'page_user.php';
-                            }
-                            break;
-                            case 'filter':
-                            {
-                                require 'page_filter.php';
-                            }
-                            break;
-                            case 'specimen':
-                            {
-                                require 'page_specimen.php';
-                            }
-                            break;
-                            case 'locality':
-                            {
-                                require 'page_locality.php';
-                            }
-                            break;
-                            case 'determination':
-                            {
-                                require 'page_determination.php';
-                            }
-                            break;
-                            case 'component':
-                            {
-                                require 'page_component.php';
-                            }
-                            break;
-                            case 'map':
-                            {
-                                require 'page_map.php';
-                            }
-                            break;
-                            case 'report':
-                            {
-                                require 'page_report.php';
-                            }
-                            break;
-                            case defaut:
-                            {
-                                
-                                require 'page_user.php';
-                            }
-                        }
-					}else{
-						require 'page_user.php';
-					}
-                    
-                    ?>
-                </fieldset>
-            </div>
-            
-        </div>
-        <div id="footer" align="center">
-                <label>Created by Cop</label>
-        </div>
-        
-    <?php
-}else{ 
-    require 'page_login.php';
+	require 'dashboard.php';
+}else{
+	require 'page_login.php';
 }
- 
 ?>
+
+</body>
+</html>
+

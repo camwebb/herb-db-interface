@@ -1,19 +1,74 @@
+<?php defined('_IBIS') or die ('Forbidden Access'); 
 
-<script language="javascript" type="text/javascript">
-
-function taxon_list(url) {
-	newwindow=window.open(url,'name','height=500,width=500,scrollbars=yes');
-	if (window.focus) {newwindow.focus()}
-	return false;
+if (isset($_POST[$randomSave]) or ($_POST[$randomUpdate])){
+	
+	if (!empty($_POST['Current_Determination_Flag'])) $Current_Determination_Flag = $_POST['Current_Determination_Flag']; else $Current_Determination_Flag = $_POST['Current_Determination_Flag'] = 'null';
+	if (!empty($_POST['Species_Code'])) $Species_Code = $_POST['Species_Code']; else $Species_Code = $_POST['Species_Code'] = 'null';
+	if (!empty($_POST['Genus_Code'])) $Genus_Code = $_POST['Genus_Code']; else $Genus_Code = $_POST['Genus_Code'] = 'null';
+	if (!empty($_POST['Species_Author_Code'])) $Species_Author_Code = $_POST['Species_Author_Code']; else $Species_Author_Code = $_POST['Species_Author_Code'] = 'null';
+	$dataSpecimen = array 
+						(
+							'table_name' => 'Determination',
+							'field_name' => array (
+													'Collector_Field_Number' 		=> 'Collector_Field_Number',
+													'Collector_Name' 				=> 'Collector_Name',
+													'Coll_Date_From' 				=> 'Coll_Date_From',
+													'Coll_Date_To' 					=> 'Coll_Date_To',
+													'ID_Determination'				=> 'ID_Determination',
+													'ID_Specimen' 					=> 'ID_Specimen',
+													'Taxonomical_Validator_By' 		=> 'Taxonomical_Validator_By',
+													'Det_Date' 						=> 'Det_Date',
+													'Determination_Qualifier' 		=> 'Determination_Qualifier',
+													'Taxonomical_Confirmed_By' 		=> 'Taxonomical_Confirmed_By',
+													'Conf_Date' 					=> 'Conf_Date',
+													'Current_Determination_Flag' 	=> 'Current_Determination_Flag',
+													'Family_Code' 					=> 'Family_Code',
+													'Genus_Code' 					=> 'Genus_Code',
+													'Species_Code' 					=> 'Species_Code',
+													'Species_Author_Code' 			=> 'Species_Author_Code',
+													'Publication' 					=> 'Publication',
+													'Informal_Group_Code' 			=> 'Informal_Group_Code',
+													'Other_Name' 					=> 'Other_Name',
+													'Data_Value' 					=> 'Data_Value'	
+												  ),
+												  
+							'field_data' => array (
+													'Collector_Field_Number' 		=> trim(htmlspecialchars($_POST['Collector_Field_Number'])),
+													'Collector_Name' 				=> trim(htmlspecialchars($_POST['Collector_Name'])),
+													'Coll_Date_From' 				=> trim(htmlspecialchars($_POST['Coll_Date_From'])),
+													'Coll_Date_To' 					=> trim(htmlspecialchars($_POST['Coll_Date_To'])),
+													'Taxonomical_Validator_By' 		=> trim(htmlspecialchars($_POST['Taxonomical_Validator_By'])),
+													'Det_Date'						=> trim(htmlspecialchars($_POST['Det_Date'])),
+													'Determination_Qualifier' 		=> trim(htmlspecialchars($_POST['Determination_Qualifier'])),
+													'Taxonomical_Confirmed_By' 		=> htmlspecialchars($_POST['Taxonomical_Confirmed_By']),
+													'Conf_Date' 					=> trim(htmlspecialchars($_POST['Conf_Date'])),
+													'Current_Determination_Flag' 	=> trim(htmlspecialchars($Current_Determination_Flag)),
+													'Family_Code' 					=> trim(htmlspecialchars($_POST['Family_Code'])),
+													'Genus_Code' 					=> trim(htmlspecialchars($Genus_Code)),
+													'Species_Code' 					=> trim(htmlspecialchars($Species_Code)),
+													'Species_Author_Code' 			=> trim(htmlspecialchars($Species_Author_Code)),
+													'Publication' 					=> htmlspecialchars($_POST['Publication']),
+													'Informal_Group_Code' 			=> trim(htmlspecialchars($_POST['Informal_Group_Code'])),
+													'Other_Name' 					=> htmlspecialchars($_POST['Other_Name']),
+													'Data_Value' 					=> trim(htmlspecialchars($_POST['Data_Value']))
+												  ),
+							'page_id' => $_POST['pid']	
+							
+						);
+				
+	if ($_POST[$randomSave]){
+		insert_tab_determination($dataSpecimen);
+	}else{
+		update_tab_determination($dataSpecimen);
+	}
+	
+	//masukkan data ke fungsi insert
 }
 
-
-</script>
-
+?>
 
 
-<body>
-    <form method="GET" action="controller/form_action.php">
+    <form method="POST" action="">
 <!--tabel frame-->
 
     <!--tabel header-->
@@ -27,32 +82,32 @@ function taxon_list(url) {
                     <tr>
                         <td width="100" align="right">Determiner BY </td>
 			<td width="100">
-                            <input type="text" name="textfield" />
+                            <input type="text" name="Taxonomical_Validator_By" value="<?php echo $Taxonomical_Validator_By?>"/>
 			</td>
 			<td width="" align="right">Date</td>
 			<td width="">
-                            <input type="text" name="textfield3" size="10"/>
+                            <input type="text" name="Det_Date" size="10" value="<?php echo $Det_Date?>"/>
 			</td>
 			<td width="" align="right">Determination Qualifier </td>
 			<td width="150">
-                            <select name="select" >
-                                <option value=""></option>
-                                <?php load_id('xQualifier', 'ID', 'Text')?>
+                            <select name="Determination_Qualifier" >
+                                <option value="null"></option>
+                                <?php load_id('xQualifier', 'ID', 'Text', $Determination_Qualifier)?>
                             </select>
 			</td>
                     </tr>
                     <tr>
                         <td align="right">Confirmed By </td>
 			<td>
-                            <input type="text" name="textfield2" />
+                            <input type="text" name="Taxonomical_Confirmed_By" value="<?php echo $Taxonomical_Confirmed_By?>"/>
 			</td>
 			<td align="right">Date</td>
                         <td>
-                            <input type="text" name="textfield4" size="10"/>
+                            <input type="text" name="Conf_Date" size="10"/>
 			</td>
 			<td align="right">Current Determination </td>
 			<td>
-                            <input type="checkbox" name="checkbox" value="checkbox" />
+                            <input type="checkbox" name="Current_Determination_Flag" value="" />
 			</td>
                     </tr>
 		</table>
@@ -64,88 +119,89 @@ function taxon_list(url) {
                         <table border="0" width="300">
                             <tr>
                                 <td align="right" width="85">Family</td>
-				<td>
-                                    
-                                    <select name='family' id="family" onChange='DinamisFamily(this)' class="combobox">
-                                        <option></option>
-					<?php //load_id('Family_Text','ID','Text')?>
+								<td>
+								
+                                    <select name='Family_Code' id="Family_Code" onChange='DinamisFamily(this)' class="combobox">
+                                        <option value="null"></option>
+										<?php 
+										
+											load_id('Family_Text','ID','Family', $Family_Code)
+										
+										?>
                                     </select>
-                                    
                                 </td>
                             </tr>
                             <tr>
                                 <td align="right">Genus</td>
                                 <td>
-                                    <?php
-                                    if($_GET['pid']){
-                                    ?>
-                                    <select name="genus" id="genus" onChange='DinamisGenus(this)' class="combobox">
-                                        <?php get_genus($Family_Code, $Genus_Code);
+                                   
+                                    <select name="Genus_Code" id="Genus_Code" onChange='DinamisGenus(this)' class="combobox">
+                                         
+                                        <?php 
+                                        if (isset($_SESSION['specimenID_Filter'])){
+											//load_id('Genus_Text', 'ID', 'Genus', $Genus_Code); 
+											get_specimen_code(array 
+																	(
+																	'id_parent' 				=> $Family_Code, 
+																	'table_parent' 				=> 'Genus',
+																	'table_parent_condition' 	=> 'Family_ID',
+																	'field_parent' 				=> 'Genus',
+																	'table_child' 				=> 'Genus_Text',
+																	'field_child_1'				=> 'ID',
+																	'field_child_2' 			=> 'Genus',
+																	'selectedID' 				=> $Genus_Code
+																	));
+										}
+                                        
                                         ?>
                                     </select>
-                                    <?php
-                                    }else{
-                                    ?>
+									
 
-                                    <select name="genus" id="genus" onChange='DinamisGenus(this)' class="combobox">
-                                        <option value=""></option>
-
-                                    </select>
-                                    <?php
-                                    }
-                                    ?>
-				</td>
+								</td>
                             </tr>
                             <tr>
                                 <td align="right">Species</td>
                                 <td>
-                                    <?php
-                                    if($_GET['pid']){
-                                    ?>
-                                    <select name="species" id="species" onChange='DinamisSpecies(this)' class="combobox">
-                                        <option value=""></option>
-                                        <?php get_species_selected($Genus_Code, $Species_Code);
-
+                                    
+                                    <select name="Species_Code" id="Species_Code" onChange='DinamisSpecies(this)' class="combobox">
+                                       
+                                        <?php 
+                                        if (isset($_SESSION['specimenID_Filter'])){
+											//load_id('Species_Text', 'ID', 'Species', $Species_Code);
+											get_specimen_code(array 
+																	(
+																	'id_parent' 				=> $Genus_Code, 
+																	'table_parent' 				=> 'Species',
+																	'table_parent_condition' 	=> 'Genus_ID',
+																	'field_parent' 				=> 'Species',
+																	'table_child' 				=> 'Species_Text',
+																	'field_child_1' 			=> 'ID',
+																	'field_child_2' 			=> 'Species',
+																	'selectedID' 				=> $Species_Code
+																	));
+										}
                                         ?>
                                     </select>
-                                    <?php
-                                    }else{
-                                    ?>
-                                    <select name="species" id="species" onChange='DinamisSpecies(this)' class="combobox">
-                                        <option value=""></option>
-
-                                    </select>
-                                    <?php
-                                    }
-                                    ?>
+                                   
                                </td>
                             </tr>
                             <tr>
                                 <td align="right">Author</td>
-				<td>
-                                    <?php
-                                    if($_GET['pid']){
-                                    ?>
-                                    <select name="author" id="author" onChange='DinamisAuthor(this)' class="combobox">
-                                        <option value=""></option>
+								<td>
+                                   
+                                    <select name="Species_Author_Code" id="Species_Author_Code" onChange='DinamisAuthor(this)' class="combobox">
+                                        <option value="null"></option>
 
-                                        <?php get_species_author_selected($Species_Code, $Species_Author_Code);
-
+                                        <?php 
+                                        if (isset($_SESSION['specimenID_Filter'])){
+											//load_id('Species_Author_Text', 'ID', 'Species_Author', $Species_Author_Code); 
+                                        }
                                         ?>
                                     </select>
-                                    <?php
-                                    }else{
-                                    ?>
-                                    <select name="author" id="author" class="combobox">
-                                        <option value=""></option>
-
-                                    </select>
-                                    <?php
-                                                            }
-                                    ?>
-				</td>
+                                   
+								</td>
                             </tr>
-			</table>
+					</table>
 			    </td>
 				<td width="">
 				</td>
@@ -160,7 +216,7 @@ function taxon_list(url) {
 						<tr>
 							<td>
 								<select name="select6" class="combobox">
-								<option></option>
+								<option value="null"></option>
 								<?php load_id('xRank', 'ID', 'Text')?>
 								</select>
 							</td>
@@ -181,13 +237,13 @@ function taxon_list(url) {
 				<tr>
 					<td width="90" align="right" rowspan="2" valign="top">Publication</td>
 					<td rowspan="2">
-						<textarea name="textarea" cols="20" rows="" class="max_size"><?php echo $Publication?></textarea>
+						<textarea name="Publication" cols="20" rows="" class="max_size"><?php echo $Publication?></textarea>
 					</td>
 					<td align="right" colspan="3" width="">Informal Group </td>
 					<td width="200">
-						<select name="select10" style="width:100%">
-						<option></option>
-						<?php load_id('xInformal_Group', 'ID', 'Text')?>
+						<select name="Informal_Group_Code" style="width:100%">
+						<option value="null"></option>
+						<?php load_id('xInformal_Group', 'ID', 'Text', $Informal_Group_Code)?>
 						</select>
 					</td>
 				</tr>
@@ -195,7 +251,7 @@ function taxon_list(url) {
 					
 					<td align="right" colspan="3">Other Name </td>
 					<td>
-						<input type="text" name="textfield13" />
+						<input type="text" name="Other_Name" value="<?php echo $Other_Name?>"/>
 					</td>
 				</tr>
 			</table>

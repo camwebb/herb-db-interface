@@ -2,7 +2,7 @@
 
 defined('_IBIS') or die ('Forbidden Access');
 
-if (isset($_POST['save_locality'])){
+if (isset($_POST[$randomSave]) or ($_POST[$randomUpdate])){
 	
 	if (!empty ($_POST['Lat_From'])) $Lat_From = $_POST['Lat_From']; else $Lat_From = 'null';
 	if (!empty ($_POST['Lat_To'])) $Lat_To = $_POST['Lat_To']; else $Lat_To = 'null';
@@ -46,6 +46,7 @@ $dataSpecimen = array
 												  ),
 												  
 							'field_data' => array (
+													'ID_Specimen' 				=> trim(htmlspecialchars($_POST['ID_Specimen'])),
 													'Collector_Field_Number' 	=> trim(htmlspecialchars($_POST['Collector_Field_Number'])),
 													'Collector_Name' 			=> trim(htmlspecialchars($_POST['Collector_Name'])),
 													'Coll_Date_From' 			=> trim(htmlspecialchars($_POST['Coll_Date_From'])),
@@ -72,10 +73,16 @@ $dataSpecimen = array
 													'Alt_To' 					=> trim(htmlspecialchars($Alt_To)),
 													'Geocode_Method' 			=> trim(htmlspecialchars($_POST['Geocode_Method'])),
 													'Data_Value' 				=> trim(htmlspecialchars($_POST['Data_Value']))
-												  )
+												  ),
+							'page_id' => $_POST['pid']					  
 						);
 						
-	insert_tab_locality($dataSpecimen);
+	if ($_POST[$randomSave]){
+		insert_tab_locality($dataSpecimen);
+	}else{
+		update_tab_locality($dataSpecimen);
+	}
+	
 }	
 ?>
 
@@ -96,7 +103,7 @@ $dataSpecimen = array
 							</td>
 							<td width="360">
 								
-										<select name="Habitat_Code" style="width:150px;">
+										<select name="Habitat_Code" style="width:150px;" class="combobox">
 										<option value="null"></option>
 										<?php load_id('xHabitat_Classification', 'ID', 'Text', $Habitat_Code)?>
 										</select>
@@ -110,26 +117,26 @@ $dataSpecimen = array
 							</td>
 							<td width="" align="right" >Latitude From </td>
 							<td width="170">
-								<input name="Lat_From" type="text" size="3" <?php echo $readonly;?> value="<?php //echo $Lat_From;?>"/>to<input name="Lat_To" type="text" size="3" <?php echo $readonly;?> value="<?php //echo $Lat_To;?>"/>
+								<input name="Lat_From" class="" type="text" size="3" <?php echo $readonly;?> value="<?php //echo $Lat_From;?>"/>to<input name="Lat_To" class="" type="text" size="3" <?php echo $readonly;?> value="<?php //echo $Lat_To;?>"/>
 							</td>
 						</tr>
 						<tr>
 							<td align="right">Habitat Detail </td>
 							<td>
 
-								<textarea name="Habitat_Detail" class="max_size" cols="41" rows="3" <?php echo $readonly;?>><?php echo $Habitat_Detail;?></textarea>
+								<textarea name="Habitat_Detail" class="textarea" cols="41" rows="3" <?php echo $readonly;?>><?php echo $Habitat_Detail;?></textarea>
 
 							</td>
 							<td align="right" width="">Longitude From </td>
 							<td width="">
-								<input name="Lon_From"  type="text" size="3" <?php echo $readonly;?> value="<?php //echo $Lon_From;?>"/>to<input name="Lon_To" type="text" size="3" <?php echo $readonly;?> value="<?php //echo $Lon_To;?>"/>
+								<input name="Lon_From" class="" type="text" size="3" <?php echo $readonly;?> value="<?php //echo $Lon_From;?>"/>to<input name="Lon_To" type="text" size="3" <?php echo $readonly;?> value="<?php //echo $Lon_To;?>"/>
 							</td>
 						</tr>
 						<tr>
 							<td align="right">Locality Detail </td>
 							<td>
 
-								<textarea name="Locality_Detail" class="max_size" <?php echo $readonly;?> rows="3" cols="41"><?php echo $Locality_Detail;?></textarea>
+								<textarea name="Locality_Detail" class="textarea" <?php echo $readonly;?> rows="3" cols="41"><?php echo $Locality_Detail;?></textarea>
 
 							</td>
 							<td>&nbsp;</td>
@@ -138,7 +145,7 @@ $dataSpecimen = array
 						<tr>
 							<td align="right">Country</td>
 							<td>
-							<input type="text" name="Country_Name" size="13" <?php echo $readonly;?> value="<?php echo $Country_Name;?>" />Sub District<input type="text" name="Sub_District_Name" size="13" <?php echo $readonly;?> value="<?php echo $Sub_District_Name;?>" />
+							<input type="text" class="" name="Country_Name" size="13" <?php echo $readonly;?> value="<?php echo $Country_Name;?>" />Sub District<input type="text" name="Sub_District_Name" size="13" <?php echo $readonly;?> value="<?php echo $Sub_District_Name;?>" />
 
 							</td>
 							<td align="right">Nearest Name Place </td>
@@ -163,7 +170,7 @@ $dataSpecimen = array
 							</td>
 							<td align="right">Distance From NNP </td>
 							<td>
-								<input name="NNP_Distance" type="text" size="3" <?php echo $readonly;?> value="<?php echo $NNP_Distance?>"/>
+								<input class="" name="NNP_Distance" type="text" size="3" <?php echo $readonly;?> value="<?php echo $NNP_Distance?>"/>
 							  km
 							</td>
 						</tr>
@@ -204,7 +211,7 @@ $dataSpecimen = array
 						<tr>
 							<td>&nbsp;</td>
 
-							<td align="left" width="55">Altitude From :<input type="text" name="Alt_From" size="4" <?php echo $readonly;?>/> To :<input name="Alt_To" type="text" value="" size="1" maxlength="4" <?php echo $readonly;?>/><input name="textfield12" type="text" size="1" maxlength="1" <?php echo $readonly;?>/>
+							<td align="left" width="55">Altitude From :<input class="" type="text" name="Alt_From" size="4" <?php echo $readonly;?>/> To :<input name="Alt_To" type="text" value="" size="1" maxlength="4" <?php echo $readonly;?>/><input name="textfield12" type="text" size="1" maxlength="1" <?php echo $readonly;?>/>
 							</td>
 
 							<td align="right">Method of Geocode </td>
