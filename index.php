@@ -1,18 +1,22 @@
 <?php
 session_start();
 define('_IBIS', TRUE);
+$app['path']['root_path'] = './';
+$app['path']['config_path'] = './config/';
+require $app['path']['config_path'].'config.php';
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
   <head>
-	<link rel="stylesheet" type="text/css" href="css/ibis_style.css">
-	<link rel="stylesheet" href="css/fancybox.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo $app['path']['css_path'].'ibis_style'.$file['ext']['css_ext']; ?>">
+	<link rel="stylesheet" href="<?php echo $app['path']['css_path'].'fancybox'.$file['ext']['css_ext']; ?>" />
 	
-    <script type="text/JavaScript" src="js/combobox_dinamis.js"></script>
-    <script type="text/JavaScript" src="js/form_validation.js"></script>
-    <script type="text/JavaScript" src="js/jquery/jquery-1.7.1.min.js"></script>
-    <script type="text/JavaScript" src="js/jquery/jquery.fancybox-1.3.4.js"></script>
-     <script type="text/JavaScript" src="js/jquery/jquery.maskedinput-1.2.2.js"></script>
+    <script type="text/JavaScript" src="<?php echo $app['path']['js_path'].'combobox_dinamis'.$file['ext']['js_ext'];?>"></script>
+    <script type="text/JavaScript" src="<?php echo $app['path']['js_path'].'form_validation'.$file['ext']['js_ext'];?>"></script>
+    <script type="text/JavaScript" src="<?php echo $app['path']['jquery_path'].'jquery-1.7.1.min'.$file['ext']['js_ext'];?>"></script>
+    <script type="text/JavaScript" src="<?php echo $app['path']['jquery_path'].'jquery.fancybox-1.3.4'.$file['ext']['js_ext'];?>"></script>
+     <script type="text/JavaScript" src="<?php echo $app['path']['jquery_path'].'jquery.maskedinput-1.2.2'.$file['ext']['js_ext'];?>"></script>
     <!--fancy box script-->
     <script type="text/javascript">
 		$(document).ready(function() {
@@ -62,18 +66,24 @@ define('_IBIS', TRUE);
 <?php
 
 //include all function here
-require 'database.php'; 
-require 'func/references_func.php'; 
-require 'session_list.php'; 
-require 'func/insert_func.php';
-require 'func/filter_search.php'; 
-require 'func/load_combobox_value.php';
-require 'func/update_func.php';
+//require $app['path']['config_path'].'db_helper.php';
+require $app['path']['config_path'].'database.php';
+require $app['path']['func_path'].'references_func.php'; 
+require $app['path']['config_path'].'session_list.php'; 
+require $app['path']['func_path'].'insert_func.php';
+require $app['path']['func_path'].'filter_search.php'; 
+require $app['path']['func_path'].'update_func.php';
+require $app['path']['func_path'].'filter_func.php';
 
+// Membuat object baru
+
+//$DBVAR = new DB();
+
+// cek apakah user sudah login atau belum
 if (isset($_SESSION['userID'])){
-	require 'dashboard.php';
+	require $app['path']['view_path'].'dashboard.php';
 }else{
-	require 'page_login.php';
+	require $app['path']['view_path'].'page_login.php';
 }
 ?>
 

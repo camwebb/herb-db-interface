@@ -1,19 +1,19 @@
 <?php
-include '../database.php';
-
+defined('_IBIS') or die ('Forbidden Access');
 //tab filter
-if (isset ($_GET['data'])){ 
+
+if (isset ($_GET['data'])){
 	
 	//get_data(array ('id_field' => $_GET['field']));
 	
-}else if (isset ($_GET['compare'])){ 
+}else if (isset ($_GET['compare'])){
 	get_data(array (
 					'kode' => $_GET['kode'],
 					'id_field' => $_GET['field'],
 					'id_compare' => $_GET['id_compare']
 					)
 					);
-}else if (isset ($_GET['field'])){ 
+}else if (isset ($_GET['field'])){
 	get_compare(array ('id_field' => $_GET['kode']));
 }else if (isset ($_GET['table'])){ 
 	get_field(array ('id_table' => $_GET['kode']));
@@ -34,7 +34,7 @@ if (isset($_GET['species'])){
 					'field_child_1' => 'ID',
 					'field_child_2' => 'Species'
 					));
-}else if (isset($_GET['family'])){
+}else if (isset($_GET['family'])){ //echo 'ok';
 	get_specimen_code(array 
 					(
 					'id_parent' => $_GET['kode'], 
@@ -49,28 +49,6 @@ if (isset($_GET['species'])){
 //end tab determination
 
 //main function
-
-function get_specimen_code($data){
-	$querySpec = "SELECT ".$data['field_parent']." 
-					FROM ".$data['table_parent']." 
-					WHERE ".$data['table_parent_condition']." = ".$data['id_parent'];
-	//print_r($querySpec);
-	$resultSpec = mysql_query($querySpec) or die (mysql_error);
-	
-	echo "<option value=''></option>";
-	
-	while ($dataSpec = mysql_fetch_array($resultSpec)){
-		$querySpecText = "SELECT * FROM ".$data['table_child']." 
-							WHERE ".$data['field_child_1']." = ".$dataSpec[$data['field_parent']];
-		//print_r($querySpecText);
-		$resultSpecText = mysql_query($querySpecText) or die (mysql_error);
-		while ($dataSpecText = mysql_fetch_assoc($resultSpecText)){
-			echo "<option value=".$dataSpecText[$data['field_child_1']].">".$dataSpecText[$data['field_child_2']]."</option>";
-		}	
-	}
-	
-}
-
 
 
 function get_field($dataTable){
@@ -153,8 +131,35 @@ function get_data($dataData){
 		}
 	}
 	
+}
+
+
+function get_specimen_code($data){ 
+	if (!empty($data['id_parent'])){
+		$querySpec = "SELECT ".$data['field_parent']." 
+					FROM ".$data['table_parent']." 
+					WHERE ".$data['table_parent_condition']." = ".$data['id_parent'];
+		//print_r($querySpec);
+		
+		$resultSpec = mysql_query($querySpec) or die (mysql_error);
+		
+		echo "<option value=''></option>";
+		
+		while ($dataSpec = mysql_fetch_array($resultSpec)){
+			$querySpecText = "SELECT * FROM ".$data['table_child']." 
+								WHERE ".$data['field_child_1']." = ".$dataSpec[$data['field_parent']];
+			//print_r($querySpecText);
+			$resultSpecText = mysql_query($querySpecText) or die (mysql_error);
+			while ($dataSpecText = mysql_fetch_assoc($resultSpecText)){
+				echo "<option value=".$dataSpecText[$data['field_child_1']].">".$dataSpecText[$data['field_child_2']]."</option>";
+			}	
+		}
+	}
+	
 	
 }
 
 
+
 ?>
+

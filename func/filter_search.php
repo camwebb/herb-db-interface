@@ -1,7 +1,7 @@
 <?php
 function get_data_from_table($dataRecord){ 
 	
-	
+	$app['path']['config_path'] = './config/';
 	//cek record filter 
 	$compareSymbol = array(
 						'compareSymbol_0',
@@ -67,23 +67,24 @@ function get_data_from_table($dataRecord){
 		//$varTableQuery[$i] = "SELECT * FROM view_table WHERE tableID =" .$dataRecord['table_'.$i];
 		$varFieldQuery[$i] = "SELECT * FROM view_field WHERE ID_Field =" .$dataRecord['field_'.$i];
 	
-	
-	
-	if (($dataRecord['field_'.$i] == 1)){
+		//ganti tabel locality menjadi specimen
+		if ($dataRecord['table_'.$i] == 'Locality'){
+			$dataRecord['table_'.$i] = 'Specimen'; 
+		}
 		
-		$varFieldResult[$i] = mysql_query($varFieldQuery[$i]) or die (mysql_error);
-		$varDataField[$i] = mysql_fetch_assoc($varFieldResult[$i]);
+		if (($dataRecord['field_'.$i] == 1)){
+			
+			$varFieldResult[$i] = mysql_query($varFieldQuery[$i]) or die (mysql_error);
+			$varDataField[$i] = mysql_fetch_assoc($varFieldResult[$i]);
+			
+			
+				if ($dataRecord['data_'.$i] != ''){
+					$varQueryColl[$i] = "SELECT * FROM " .$varDataField[$i]['FromTable']. " WHERE ID =". $dataRecord['data_'.$i]; 
+					//print_r($queryColl);
+					
+				}
+		}
 		
-		
-			if ($dataRecord['data_'.$i] != ''){
-				$varQueryColl[$i] = "SELECT * FROM " .$varDataField[$i]['FromTable']. " WHERE ID =". $dataRecord['data_'.$i]; 
-				//print_r($queryColl);
-				//$varResultColl[$i] = mysql_query($varQueryColl[$i]) or die (mysql_error);
-				//$varDataColl[$i] = mysql_fetch_assoc($varResultColl[$i]);
-				//break;
-			}
-		
-	}
 	endfor;
 				
 	if (!empty($dataRecord['compare_0'])){ 
@@ -98,92 +99,155 @@ function get_data_from_table($dataRecord){
 								and ($dataRecord['operator_3'] !='') and ($dataRecord['operator_4'] !='')){
 							
 							
-								for ($i = 0; $i <= $loop; $i++):
-								
-								include './compare_replace.php';
-								
-								$varFieldQuery[$i] = "SELECT * FROM view_field WHERE Field = '" .$dataRecord['field_'.$i]."'";
-								print_r($varFieldQuery[$i]);
-								$varFieldResult[$i] = mysql_query($varFieldQuery[$i]) or die (mysql_error);
-								$varSum = mysql_num_rows($varFieldResult[$i]);
-								$varDataField[$i] = mysql_fetch_assoc($varFieldResult[$i]);
-								
-								endfor;
-								
-								print_r($dataRecord);
-								
+									for ($i = 0; $i <= $loop; $i++):
 									
-									if (($dataRecord['field_0']!=='') and ($dataRecord['field_1']!=='') 
-										and ($dataRecord['field_2']!=='') and ($dataRecord['field_3']!=='')
-										and ($dataRecord['field_4']!=='')){
+										include $app['path']['config_path'].'compare_replace.php';
+										
+										$varFieldQuery[$i] = "SELECT * FROM view_field WHERE Field = '" .$dataRecord['field_'.$i]."'";
+										print_r($varFieldQuery[$i]);
+										$varFieldResult[$i] = mysql_query($varFieldQuery[$i]) or die (mysql_error);
+										$varSum = mysql_num_rows($varFieldResult[$i]);
+										$varDataField[$i] = mysql_fetch_assoc($varFieldResult[$i]);
+										
+									endfor;
 									
-									list ($jmlRec, $specimenID) = filter_five(
-												array (
-													'table_0' => $dataRecord['table_0'],
-													'where_0' => $where[0],
-													'field_0' => $varDataField[0][Specimen_View],
-													'condition_0' => $compareSymbol[0],
-													'data_0' => $dataRecord['data_0'],
-													'persen_0' => $persen[0],
-													'operator_1' => $dataRecord['operator_1'],
-													
-													'table_1' => $dataRecord['table_1'],
-													'where_1' => $where[1],
-													'field_1' => $varDataField[1][Specimen_View],
-													'condition_1' => $compareSymbol[1],
-													'data_1' => $dataRecord['data_1'],
-													'persen_1' => $persen[1],
-													'operator_2' => $dataRecord['operator_1'],
-													
-													'table_2' => $dataRecord['table_2'],
-													'where_2' => $where[2],
-													'field_2' => $varDataField[2][Specimen_View],
-													'condition_2' => $compareSymbol[2],
-													'data_2' => $dataRecord['data_2'],
-													'persen_2' => $persen[2],
-													
-													'table_3' => $dataRecord['table_3'],
-													'where_2' => $where[3],
-													'field_3' => $varDataField[3][Specimen_View],
-													'condition_3' => $compareSymbol[3],
-													'data_3' => $dataRecord['data_3'],
-													'persen_3' => $persen[3],
-													
-													'table_4' => $dataRecord['table_4'],
-													'where_4' => $where[4],
-													'field_4' => $varDataField[4][Specimen_View],
-													'condition_4' => $compareSymbol[4],
-													'data_4' => $dataRecord['data_4'],
-													'persen_4' => $persen[4]
-													
-												));
+									print_r($dataRecord);
 									
-									return array($jmlRec, $specimenID);
+										
+										if (($dataRecord['field_0']!=='') and ($dataRecord['field_1']!=='') 
+											and ($dataRecord['field_2']!=='') and ($dataRecord['field_3']!=='')
+											and ($dataRecord['field_4']!=='')){
+										
+										list ($jmlRec, $specimenID) = filter_five(
+													array (
+														'table_0' 		=> $dataRecord['table_0'],
+														'where_0' 		=> $where[0],
+														'field_0' 		=> $varDataField[0][Specimen_View],
+														'condition_0' 	=> $compareSymbol[0],
+														'data_0' 		=> $dataRecord['data_0'],
+														'persen_0' 		=> $persen[0],
+														'operator_1' 	=> $dataRecord['operator_1'],
+														
+														'table_1' 		=> $dataRecord['table_1'],
+														'where_1' 		=> $where[1],
+														'field_1' 		=> $varDataField[1][Specimen_View],
+														'condition_1' 	=> $compareSymbol[1],
+														'data_1' 		=> $dataRecord['data_1'],
+														'persen_1' 		=> $persen[1],
+														'operator_2' 	=> $dataRecord['operator_1'],
+														
+														'table_2' 		=> $dataRecord['table_2'],
+														'where_2' 		=> $where[2],
+														'field_2' 		=> $varDataField[2][Specimen_View],
+														'condition_2' 	=> $compareSymbol[2],
+														'data_2' 		=> $dataRecord['data_2'],
+														'persen_2' 		=> $persen[2],
+														
+														'table_3' 		=> $dataRecord['table_3'],
+														'where_2' 		=> $where[3],
+														'field_3' 		=> $varDataField[3][Specimen_View],
+														'condition_3' 	=> $compareSymbol[3],
+														'data_3' 		=> $dataRecord['data_3'],
+														'persen_3' 		=> $persen[3],
+														
+														'table_4' 		=> $dataRecord['table_4'],
+														'where_4' 		=> $where[4],
+														'field_4' 		=> $varDataField[4][Specimen_View],
+														'condition_4' 	=> $compareSymbol[4],
+														'data_4' 		=> $dataRecord['data_4'],
+														'persen_4' 		=> $persen[4]
+														
+													));
+										
+											return array($jmlRec, $specimenID);
+										
+										}
 									
-									}
-									
-								
-								
-								
-							}else{
-								echo '<script type=text/javascript>alert("Gunakan Operator"); window.location="./?page=filter"</script>';
-							}
+								}else{
+									echo '<script type=text/javascript>alert("Gunakan Operator"); window.location="./?page=filter"</script>';
+								}
 					}else{
+						
 						$loop = 3; //3
 						
 							if (($dataRecord['operator_1'] !='') and ($dataRecord['operator_2'] !='') 
 								and ($dataRecord['operator_3'] !='')){
 							
 							
+								for ($i = 0; $i <= $loop; $i++):
+									
+									include $app['path']['config_path'].'compare_replace.php';
+									
+									$varFieldQuery[$i] = "SELECT * FROM view_field WHERE Field = '" .$dataRecord['field_'.$i]."'";
+									print_r($varFieldQuery[$i]);
+									$varFieldResult[$i] = mysql_query($varFieldQuery[$i]) or die (mysql_error);
+									$varSum = mysql_num_rows($varFieldResult[$i]);
+									$varDataField[$i] = mysql_fetch_assoc($varFieldResult[$i]);
+									
+								endfor;
+								
+								print_r($dataRecord);
+								
+									
+									if (($dataRecord['field_0']!=='') and ($dataRecord['field_1']!=='') 
+										and ($dataRecord['field_2']!=='') and ($dataRecord['field_3']!=='')){
+									
+									list ($jmlRec, $specimenID) = filter_four(
+												array (
+													'table_0' 		=> $dataRecord['table_0'],
+													'where_0' 		=> $where[0],
+													'field_0' 		=> $varDataField[0][Specimen_View],
+													'condition_0' 	=> $compareSymbol[0],
+													'data_0' 		=> $dataRecord['data_0'],
+													'persen_0' 		=> $persen[0],
+													'operator_1' 	=> $dataRecord['operator_1'],
+													
+													'table_1' 		=> $dataRecord['table_1'],
+													'where_1' 		=> $where[1],
+													'field_1' 		=> $varDataField[1][Specimen_View],
+													'condition_1' 	=> $compareSymbol[1],
+													'data_1' 		=> $dataRecord['data_1'],
+													'persen_1' 		=> $persen[1],
+													'operator_2' 	=> $dataRecord['operator_1'],
+													
+													'table_2' 		=> $dataRecord['table_2'],
+													'where_2' 		=> $where[2],
+													'field_2' 		=> $varDataField[2][Specimen_View],
+													'condition_2' 	=> $compareSymbol[2],
+													'data_2' 		=> $dataRecord['data_2'],
+													'persen_2' 		=> $persen[2],
+													
+													'table_3' 		=> $dataRecord['table_3'],
+													'where_2' 		=> $where[3],
+													'field_3' 		=> $varDataField[3][Specimen_View],
+													'condition_3' 	=> $compareSymbol[3],
+													'data_3' 		=> $dataRecord['data_3'],
+													'persen_3' 		=> $persen[3]
+													
+												));
+									
+										return array($jmlRec, $specimenID);
+									
+									}
+								
+							}else{
+								echo '<script type=text/javascript>alert("Gunakan Operator"); window.location="./?page=filter"</script>';
+							}
+					}
+				}else{
+					$loop = 2;//2
+					
+						if (($dataRecord['operator_1'] !='') and ($dataRecord['operator_2'] !='')){
+						
 							for ($i = 0; $i <= $loop; $i++):
 							
-							include './compare_replace.php';
-							
-							$varFieldQuery[$i] = "SELECT * FROM view_field WHERE Field = '" .$dataRecord['field_'.$i]."'";
-							print_r($varFieldQuery[$i]);
-							$varFieldResult[$i] = mysql_query($varFieldQuery[$i]) or die (mysql_error);
-							$varSum = mysql_num_rows($varFieldResult[$i]);
-							$varDataField[$i] = mysql_fetch_assoc($varFieldResult[$i]);
+								include $app['path']['config_path'].'compare_replace.php';
+								
+								$varFieldQuery[$i] = "SELECT * FROM view_field WHERE Field = '" .$dataRecord['field_'.$i]."'";
+								//print_r($varFieldQuery[$i]);
+								$varFieldResult[$i] = mysql_query($varFieldQuery[$i]) or die (mysql_error);
+								$varSum = mysql_num_rows($varFieldResult[$i]);
+								$varDataField[$i] = mysql_fetch_assoc($varFieldResult[$i]);
 							
 							endfor;
 							
@@ -191,114 +255,42 @@ function get_data_from_table($dataRecord){
 							
 								
 								if (($dataRecord['field_0']!=='') and ($dataRecord['field_1']!=='') 
-									and ($dataRecord['field_2']!=='') and ($dataRecord['field_3']!=='')){
+									and ($dataRecord['field_2']!=='')){
 								
-								list ($jmlRec, $specimenID) = filter_four(
+								list ($jmlRec, $specimenID) = filter_triple(
 											array (
-												'table_0' => $dataRecord['table_0'],
-												'where_0' => $where[0],
-												'field_0' => $varDataField[0][Specimen_View],
-												'condition_0' => $compareSymbol[0],
-												'data_0' => $dataRecord['data_0'],
-												'persen_0' => $persen[0],
-												'operator_1' => $dataRecord['operator_1'],
+												'table_0' 		=> $dataRecord['table_0'],
+												'where_0' 		=> $where[0],
+												'field_0'		=> $varDataField[0][Specimen_View],
+												'condition_0' 	=> $compareSymbol[0],
+												'data_0' 		=> $dataRecord['data_0'],
+												'persen_0' 		=> $persen[0],
+												'operator_1' 	=> $dataRecord['operator_1'],
 												
-												'table_1' => $dataRecord['table_1'],
-												'where_1' => $where[1],
-												'field_1' => $varDataField[1][Specimen_View],
-												'condition_1' => $compareSymbol[1],
-												'data_1' => $dataRecord['data_1'],
-												'persen_1' => $persen[1],
-												'operator_2' => $dataRecord['operator_1'],
+												'table_1' 		=> $dataRecord['table_1'],
+												'where_1' 		=> $where[1],
+												'field_1' 		=> $varDataField[1][Specimen_View],
+												'condition_1' 	=> $compareSymbol[1],
+												'data_1' 		=> $dataRecord['data_1'],
+												'persen_1' 		=> $persen[1],
+												'operator_2' 	=> $dataRecord['operator_1'],
 												
-												'table_2' => $dataRecord['table_2'],
-												'where_2' => $where[2],
-												'field_2' => $varDataField[2][Specimen_View],
-												'condition_2' => $compareSymbol[2],
-												'data_2' => $dataRecord['data_2'],
-												'persen_2' => $persen[2],
-												
-												'table_3' => $dataRecord['table_3'],
-												'where_2' => $where[3],
-												'field_3' => $varDataField[3][Specimen_View],
-												'condition_3' => $compareSymbol[3],
-												'data_3' => $dataRecord['data_3'],
-												'persen_3' => $persen[3]
+												'table_2' 		=> $dataRecord['table_2'],
+												'where_2' 		=> $where[2],
+												'field_2' 		=> $varDataField[2][Specimen_View],
+												'condition_2' 	=> $compareSymbol[2],
+												'data_2' 		=> $dataRecord['data_2'],
+												'persen_2' 		=> $persen[2]
 												
 											));
 								
 								return array($jmlRec, $specimenID);
 								
 								}
-								
-							
-							
 							
 						}else{
 							echo '<script type=text/javascript>alert("Gunakan Operator"); window.location="./?page=filter"</script>';
 						}
-					}
-				}else{
-					$loop = 2;//2
-					
-						if (($dataRecord['operator_1'] !='') and ($dataRecord['operator_2'] !='')){
-						
-						
-						for ($i = 0; $i <= $loop; $i++):
-						
-						include './compare_replace.php';
-						
-						$varFieldQuery[$i] = "SELECT * FROM view_field WHERE Field = '" .$dataRecord['field_'.$i]."'";
-						print_r($varFieldQuery[$i]);
-						$varFieldResult[$i] = mysql_query($varFieldQuery[$i]) or die (mysql_error);
-						$varSum = mysql_num_rows($varFieldResult[$i]);
-						$varDataField[$i] = mysql_fetch_assoc($varFieldResult[$i]);
-						
-						endfor;
-						
-						print_r($dataRecord);
-						
-							
-							if (($dataRecord['field_0']!=='') and ($dataRecord['field_1']!=='') 
-								and ($dataRecord['field_2']!=='')){
-							
-							list ($jmlRec, $specimenID) = filter_triple(
-										array (
-											'table_0' => $dataRecord['table_0'],
-											'where_0' => $where[0],
-											'field_0' => $varDataField[0][Specimen_View],
-											'condition_0' => $compareSymbol[0],
-											'data_0' => $dataRecord['data_0'],
-											'persen_0' => $persen[0],
-											'operator_1' => $dataRecord['operator_1'],
-											
-											'table_1' => $dataRecord['table_1'],
-											'where_1' => $where[1],
-											'field_1' => $varDataField[1][Specimen_View],
-											'condition_1' => $compareSymbol[1],
-											'data_1' => $dataRecord['data_1'],
-											'persen_1' => $persen[1],
-											'operator_2' => $dataRecord['operator_1'],
-											
-											'table_2' => $dataRecord['table_2'],
-											'where_2' => $where[2],
-											'field_2' => $varDataField[2][Specimen_View],
-											'condition_2' => $compareSymbol[2],
-											'data_2' => $dataRecord['data_2'],
-											'persen_2' => $persen[2]
-											
-										));
-							
-							return array($jmlRec, $specimenID);
-							
-							}
-							
-						
-						
-						
-					}else{
-						echo '<script type=text/javascript>alert("Gunakan Operator"); window.location="./?page=filter"</script>';
-					}
 				
 				}
 			}else{
@@ -310,7 +302,7 @@ function get_data_from_table($dataRecord){
 					
 					for ($i = 0; $i <= $loop; $i++):
 					
-					include './compare_replace.php';
+					include $app['path']['config_path'].'compare_replace.php';
 					
 					$varFieldQuery[$i] = "SELECT * FROM view_field WHERE Field = '" .$dataRecord['field_'.$i]."'";
 					print_r($varFieldQuery[$i]);
@@ -327,22 +319,22 @@ function get_data_from_table($dataRecord){
 						
 						list ($jmlRec, $specimenID) = filter_double(
 									array (
-										'table_0' => $dataRecord['table_0'],
-										'table_1' => $dataRecord['table_1'],
-										'where_0' => $where[0],
-										'where_1' => $where[1],
-										'field_0' => $varDataField[0][Specimen_View],
+										'table_0' 		=> $dataRecord['table_0'],
+										'table_1' 		=> $dataRecord['table_1'],
+										'where_0' 		=> $where[0],
+										'where_1' 		=> $where[1],
+										'field_0' 		=> $varDataField[0][Specimen_View],
 										
-										'condition_0' => $compareSymbol[0],
+										'condition_0' 	=> $compareSymbol[0],
 										
-										'data_0' => $dataRecord['data_0'],
-										'persen_0' => $persen[0],
-										'operator' => $dataRecord['operator_1'],
-										'field_1' => $varDataField[1][Specimen_View],
-										'condition_1' => $compareSymbol[1],
+										'data_0' 		=> $dataRecord['data_0'],
+										'persen_0' 		=> $persen[0],
+										'operator' 		=> $dataRecord['operator_1'],
+										'field_1' 		=> $varDataField[1][Specimen_View],
+										'condition_1' 	=> $compareSymbol[1],
 										
-										'data_1' => $dataRecord['data_1'],
-										'persen_1' => $persen[1]
+										'data_1' 		=> $dataRecord['data_1'],
+										'persen_1' 		=> $persen[1]
 										
 									));
 						
@@ -366,12 +358,12 @@ function get_data_from_table($dataRecord){
 			$loop = 0;
 			for ($i = 0; $i <= $loop; $i++):
 			
-			include './compare_replace.php';
-			$varFieldQuery[$i] = "SELECT * FROM view_field WHERE Field = '" .$dataRecord['field_'.$i]."'";
-			//print_r($varFieldQuery[$i]);
-			$varFieldResult[$i] = mysql_query($varFieldQuery[$i]) or die (mysql_error);
-			$varSum = mysql_num_rows($varFieldResult[$i]);
-			$varDataField[$i] = mysql_fetch_assoc($varFieldResult[$i]);
+			include $app['path']['config_path'].'compare_replace.php';
+				$varFieldQuery[$i] = "SELECT * FROM view_field WHERE Field = '" .$dataRecord['field_'.$i]."'";
+				//print_r($varFieldQuery[$i]);
+				$varFieldResult[$i] = mysql_query($varFieldQuery[$i]) or die (mysql_error);
+				$varSum = mysql_num_rows($varFieldResult[$i]);
+				$varDataField[$i] = mysql_fetch_assoc($varFieldResult[$i]);
 			endfor;
 			
 			
@@ -380,29 +372,33 @@ function get_data_from_table($dataRecord){
 				
 						list ($jmlRec, $specimenID) = filter_single(
 								array (
-									'table_0' => $dataRecord['table_0'],
-									'where_0' => $where[0],
-									'field_0' => $varDataField[0]['Specimen_View'],
-									'condition_0' => $compareSymbol[0],
-									'data_0' => $dataRecord['data_0'],
-									'persen_0' => $persen[0]
+									'table_0' 		=> $dataRecord['table_0'],
+									'where_0' 		=> $where[0],
+									'field_0' 		=> $varDataField[0]['Specimen_View'],
+									'condition_0' 	=> $compareSymbol[0],
+									'data_0' 		=> $dataRecord['data_0'],
+									'persen_0' 		=> $persen[0]
 									)
 								);
 								
 						return array($jmlRec, $specimenID);
 						
-					}
-					
-				}
-				
 			}
-			//endfor;
-			
+					
+		}
+				
+	}else{
+		echo '<script type=text/javascript>alert("Gunakan Baris pertama terlebih dahulu"); window.location.href="./?page=filter"; </script>';
 	}
+			
+//end function filter			
+}
+
+//area fungsi untuk filter, 
 	
 function filter_five($dataFilter){
 	echo "<pre>"; 
-	print_r($dataFilter);
+	//print_r($dataFilter);
 	echo "</pre>";
 	
 	if (($dataFilter['table_0']=='Specimen') and ($dataFilter['table_1']=='Specimen') 
@@ -485,7 +481,7 @@ function filter_five($dataFilter){
 			 $dataFilter['persen_4']."))";
 			
 	}		 
-	print_r($query);
+	//print_r($query);
 	$result = mysql_query($query) or die (mysql_error);
 	$sumRec = mysql_num_rows($result); echo '</br>'.$sumRec;
 	if ($sumRec){ 
@@ -500,9 +496,10 @@ function filter_five($dataFilter){
 	
 }
 
+
 function filter_four($dataFilter){
 	echo "<pre>"; 
-	print_r($dataFilter);
+	//print_r($dataFilter);
 	echo "</pre>";
 	
 	if (($dataFilter['table_0']=='Specimen') and ($dataFilter['table_1']=='Specimen') 
@@ -568,7 +565,7 @@ function filter_four($dataFilter){
 			 $dataFilter['persen_3']."))";
 			
 	}		 
-	print_r($query);
+	//print_r($query);
 	$result = mysql_query($query) or die (mysql_error);
 	$sumRec = mysql_num_rows($result); echo '</br>'.$sumRec;
 	if ($sumRec){ 
@@ -585,7 +582,7 @@ function filter_four($dataFilter){
 
 function filter_triple($dataFilter){
 	echo "<pre>"; 
-	print_r($dataFilter);
+	//print_r($dataFilter);
 	echo "</pre>";
 	
 	if (($dataFilter['table_0']=='Specimen') and ($dataFilter['table_1']=='Specimen') 
@@ -636,7 +633,7 @@ function filter_triple($dataFilter){
 			 $dataFilter['persen_2']."))";
 			
 	}		 
-	print_r($query);
+	//print_r($query);
 	$result = mysql_query($query) or die (mysql_error);
 	$sumRec = mysql_num_rows($result); echo '</br>'.$sumRec;
 	if ($sumRec){ 
@@ -653,7 +650,7 @@ function filter_triple($dataFilter){
 
 function filter_double($dataFilter){
 	echo "<pre>"; 
-	print_r($dataFilter);
+	//print_r($dataFilter);
 	echo "</pre>";
 	
 	if (($dataFilter['table_0']=='Specimen') and ($dataFilter['table_1']=='Specimen')){
@@ -687,7 +684,7 @@ function filter_double($dataFilter){
 			 $dataFilter['persen_1']."))";
 			
 	}		 
-	print_r($query);
+	//print_r($query);
 	$result = mysql_query($query) or die (mysql_error);
 	$sumRec = mysql_num_rows($result); echo '</br>'.$sumRec;
 	if ($sumRec){ 
@@ -703,7 +700,7 @@ function filter_double($dataFilter){
 
 function filter_single($dataFilter){ 
 	echo "<pre>"; 
-	print_r($dataFilter);
+	//print_r($dataFilter);
 	echo "</pre>";
 	
 	$query = "SELECT * FROM ".$dataFilter['table_0']." AS s 
@@ -714,7 +711,7 @@ function filter_single($dataFilter){
 			 $dataFilter['persen_0'];
 			 
 			 
-	print_r($query);
+	//print_r($query);
 	$result = mysql_query($query) or die (mysql_error);
 	$sumRec = mysql_num_rows($result);
 	if ($sumRec){ 

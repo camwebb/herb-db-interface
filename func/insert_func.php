@@ -44,7 +44,34 @@ function insert_tab_specimen($dataSpecimen){
 	$lastID = mysql_insert_id();
 	
 	if ($result){
+			$queryLocName = "INSERT INTO Local_Name 
+							(".
+								"`".$dataSpecimen['field_name']['ID_Specimen']."`,".
+								"`".$dataSpecimen['field_name']['Local_Name']."`,".
+								"`".$dataSpecimen['field_name']['Language']."`".
+							")
+							VALUES 
+							(".
+								"'".$lastID."',".
+								"'".$dataSpecimen['field_data']['Local_Name']."',".
+								"'".$dataSpecimen['field_data']['Language']."'".
+							")";
+			$resultLocName = mysql_query($queryLocName) or die (mysql_error);
+			//print_r($queryLocName);
 			
+			$queryLocUse = "INSERT INTO Local_Use 
+							(".
+								"`".$dataSpecimen['field_name']['ID_Specimen']."`,".
+								"`".$dataSpecimen['field_name']['Local_Use']."`".
+							")
+							VALUES 
+							(".
+								"'".$lastID."',".
+								"'".$dataSpecimen['field_data']['Local_Use']."'".
+								
+							")";
+			$resultLocUse = mysql_query($queryLocUse) or die (mysql_error);
+			//print_r($queryLocUse);
 			$_SESSION['ID_Specimen'] = $lastID;
 			echo '<script type=text/javascript>alert ("Data Sudah Masuk"); window.location="./?page=locality";</script>';
 		
