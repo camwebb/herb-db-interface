@@ -2,6 +2,8 @@
 
 defined('_IBIS') or die ('Forbidden Access');
 
+//print_r($_SESSION);
+
 if (isset($_POST[$randomSave]) or ($_POST[$randomUpdate])){
 	
 	if (!empty ($_POST['Lat_From'])) $Lat_From = $_POST['Lat_From']; else $Lat_From = 'null';
@@ -27,7 +29,7 @@ $dataSpecimen = array
 													'Lat_To' 					=> 'Lat_To',
 													'Habitat_Detail' 			=> 'Habitat_Detail',
 													'Lon_From' 					=> 'Lon_From',
-													'Lon_To' 					=> 'Lon_To',
+													//'Lon_To' 					=> 'Lon_To',
 													'Locality_Detail' 			=> 'Locality_Detail',
 													'Country_Name' 				=> 'Country_Name',
 													'Sub_District_Name' 		=> 'Sub_District_Name',
@@ -46,7 +48,7 @@ $dataSpecimen = array
 												  ),
 												  
 							'field_data' => array (
-													'ID_Specimen' 				=> trim(htmlspecialchars($_POST['ID_Specimen'])),
+													'ID_Specimen' 				=> trim(htmlspecialchars($_SESSION['ID_Specimen'])),
 													'Collector_Field_Number' 	=> trim(htmlspecialchars($_POST['Collector_Field_Number'])),
 													'Collector_Name' 			=> trim(htmlspecialchars($_POST['Collector_Name'])),
 													'Coll_Date_From' 			=> trim(htmlspecialchars($_POST['Coll_Date_From'])),
@@ -57,7 +59,7 @@ $dataSpecimen = array
 													'Lat_To' 					=> trim(htmlspecialchars($Lat_To)),
 													'Habitat_Detail' 			=> trim(htmlspecialchars($_POST['Habitat_Detail'])),
 													'Lon_From' 					=> trim(htmlspecialchars($Lon_From)),
-													'Lon_To' 					=> trim(htmlspecialchars($Lon_To)),
+													//'Lon_To' 					=> trim(htmlspecialchars($Lon_To)),
 													'Locality_Detail' 			=> trim(htmlspecialchars($_POST['Locality_Detail'])),
 													'Country_Name' 				=> trim(htmlspecialchars($_POST['Country_Name'])),
 													'Sub_District_Name' 		=> trim(htmlspecialchars($_POST['Sub_District_Name'])),
@@ -84,14 +86,19 @@ $dataSpecimen = array
 	}
 	
 }	
+
+if (isset($_POST['add_nnp_button']))
+	{
+		$insert_nnp = insert_data_nnp(array('NNP'=>$_POST['add_nnp']));
+		if ($insert_nnp){
+			 echo "<script>alert('Data sudah masuk');window.location.href='?page=locality'</script>";
+		}else{
+			echo "<script>alert('Data gagal masuk');window.location.href='?page=locality'</script>";
+		}
+	}
 ?>
 
-
-
-
 <title>Locality</title>
-
-
 
 <form method="post" action="">
 		<?php require 'page_header_info.php'?>
@@ -115,32 +122,47 @@ $dataSpecimen = array
 									  </select>
 								
 							</td>
-							<td width="" align="right" >Latitude From </td>
+							<td width="" align="right" >Latitude</td>
 							<td width="170">
-								<input name="Lat_From" class="" type="text" size="3" <?php echo $readonly;?> value="<?php //echo $Lat_From;?>"/>to<input name="Lat_To" class="" type="text" size="3" <?php echo $readonly;?> value="<?php //echo $Lat_To;?>"/>
+								<input name="Lat_From" class="" type="text" size="" <?php echo $readonly;?> value="<?php echo $Lat_From;?>"/> <!--to<input name="Lat_To" class="" type="text" size="3" <?php echo $readonly;?> value="<?php //echo $Lat_To;?>"/>-->
 							</td>
 						</tr>
 						<tr>
-							<td align="right">Habitat Detail </td>
+							<td align="right" valign="top">Habitat Detail </td>
 							<td>
 
 								<textarea name="Habitat_Detail" class="textarea" cols="41" rows="3" <?php echo $readonly;?>><?php echo $Habitat_Detail;?></textarea>
 
 							</td>
-							<td align="right" width="">Longitude From </td>
+							<td align="right" width="">Longitude</td>
 							<td width="">
-								<input name="Lon_From" class="" type="text" size="3" <?php echo $readonly;?> value="<?php //echo $Lon_From;?>"/>to<input name="Lon_To" type="text" size="3" <?php echo $readonly;?> value="<?php //echo $Lon_To;?>"/>
+								<input name="Lon_From" class="" type="text" size="" <?php echo $readonly;?> value="<?php echo $Lon_From;?>"/><!--to<input name="Lon_To" type="text" size="3" <?php echo $readonly;?> value="<?php //echo $Lon_To;?>"/>-->
 							</td>
 						</tr>
 						<tr>
-							<td align="right">Locality Detail </td>
+							<td align="right" valign="top">Locality Detail </td>
 							<td>
 
 								<textarea name="Locality_Detail" class="textarea" <?php echo $readonly;?> rows="3" cols="41"><?php echo $Locality_Detail;?></textarea>
 
 							</td>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
+							<td valign="top" colspan="2">
+								<?php
+								//pr($_SESSION);
+								
+								
+								if ($_SESSION['userLevel'] == 1):
+								?>
+								<!--<form method="POST" action="">-->
+								<fieldset style="margin-left:20px">
+									<legend style="font-size:12px; font-weight:bold">Admin Setting</legend>
+									<span style="font-size:12px">Tambah NNP : <input type="text" name="add_nnp" value="" size=""><input type="submit" name="add_nnp_button" value="Add"></span>
+								</fieldset>
+								<!--</form>-->
+								<?php
+								endif;
+								?>
+							</td>
 						</tr>
 						<tr>
 							<td align="right">Country</td>
@@ -152,8 +174,12 @@ $dataSpecimen = array
 							<td>
 								<select name="NNP_Code" class="combobox">
 								<option value="null"></option>
-								<?php load_id(' xNNP', 'ID', 'Text', $NNP_Code)?>
+								<?php 
+								load_id('xNNP', 'ID', 'Text', $NNP_Code);
+								?>
 								</select>
+								
+								
 							</td>
 						</tr>
 						<tr>
@@ -211,10 +237,10 @@ $dataSpecimen = array
 						<tr>
 							<td>&nbsp;</td>
 
-							<td align="left" width="55">Altitude From :<input class="" type="text" name="Alt_From" size="4" <?php echo $readonly;?>/> To :<input name="Alt_To" type="text" value="" size="1" maxlength="4" <?php echo $readonly;?>/><input name="textfield12" type="text" size="1" maxlength="1" <?php echo $readonly;?>/>
+							<td align="left" width="55"><!--Altitude From :<input class="" type="text" name="Alt_From" size="4" <?php echo $readonly;?>/> To :<input name="Alt_To" type="text" value="" size="1" maxlength="4" <?php echo $readonly;?>/><input name="textfield12" type="text" size="1" maxlength="1" <?php echo $readonly;?>/>-->
 							</td>
 
-							<td align="right">Method of Geocode </td>
+							<td align="right">Method of Geocode</td>
 							<td>
 								<select name="Geocode_Method" class="combobox">
 								 <option value="null"></option>
@@ -223,11 +249,10 @@ $dataSpecimen = array
 							</td>
 						</tr>
 					</table>
-		
-		
-
-		
+			
 </fieldset>
+
+					
     <?php require 'page_footer_info.php';?>
 
 </form>

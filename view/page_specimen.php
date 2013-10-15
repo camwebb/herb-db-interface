@@ -68,7 +68,7 @@ defined('_IBIS') or die ('Forbidden Access');
 if (isset($_POST[$randomNew])){
 	
 	unset_session_specimen();
-	header ('location:./?page=specimen');
+	echo "<script>window.location.href='?page=specimen'</script>"; //('location:./?page=specimen');
 }
 
 ?>

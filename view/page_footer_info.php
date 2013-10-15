@@ -1,5 +1,4 @@
 
-
 <fieldset style="padding: 0px 0px 0px 0px; margin-bottom: 5px">
 <table border="0" width="700" style="font-size:10px">
 			<tr>
@@ -148,9 +147,11 @@
 										$name_submit_save = $randomUpdate;
 										$value_submit_save = 'Update Data';
 										
+										
 									}else{
 										$name_submit_save = $randomSave;
 										$value_submit_save = 'Save Data';
+										
 									}
 									
 									$value_submit_new = 'New Data';
@@ -161,8 +162,8 @@
 										//$new_disabled = '';
 									}else{
 										
-										$save_disabled = '';
-										$new_disabled = '';
+										$save_disabled = 'disabled';
+										$new_disabled = 'disabled';
 									}
 								}else{
 									//for guest view
@@ -185,19 +186,26 @@
 								$ruleAuth = 1;
 							}
 						endfor;		
-								
+								//print_r($_SESSION);
 								if ($ruleAuth){
-									if (isset($_SESSION['specimenID_Filter']) or ($_SESSION['ID_Determination'])){
+									if (isset($_SESSION['ID_Specimen'])){
 										$name_submit_save = $randomUpdate;
 										$value_submit_save = 'Update Data';
 										
 									}else{
 										$name_submit_save = $randomSave;
 										$value_submit_save = 'Save Data';
+										
 									}
 									
-									$value_submit_new = 'New Data';
-									$name_submit_new = $randomNew;
+									if (isset($_SESSION['ID_Specimen'])){
+										$save_disabled = '';
+										//$new_disabled = '';
+									}else{
+										
+										$save_disabled = 'disabled';
+										$new_disabled = 'disabled';
+									}
 									
 								}else{
 									//for guest view
@@ -231,6 +239,15 @@
 									
 									$value_submit_new = 'New Data';
 									$name_submit_new = $randomNew;
+									
+									if (isset($_SESSION['ID_Specimen'])){
+										$save_disabled = '';
+										//$new_disabled = '';
+									}else{
+										
+										$save_disabled = 'disabled';
+										$new_disabled = 'disabled';
+									}
 									
 								}else{
 									//for guest view

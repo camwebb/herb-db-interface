@@ -7,7 +7,7 @@
             <label><?php echo $ID_Specimen; ?></label>
 
 	</td>
-        <td width="250" rowspan="4" align="center"><?php echo $Family_Name.' '.$Genus_Name.' '.$Species_Name?></td>
+        <td width="250" rowspan="4" align="center"><span style="font-style:italic; font-weight:bold"><?php echo $Family_Name.' '.$Genus_Name.' '.$Species_Name?></span></td>
 	<td width="150" rowspan="4" align="center">
 		
         <a id="specimen_image" href="img/no_image.jpg">

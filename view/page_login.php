@@ -15,7 +15,7 @@ $token = str_shuffle('abcdefghijklmnopqrstuvwxyz1234567890');
  <form method="post" action="" name="form_login" onsubmit="return validasi_login()">
     <fieldset style="background-color: #ccd; border-style:none; border-radius:10px; box-shadow:5px 5px 5px #666">
     <fieldset style="background-color: #999;">
-        <h2>IBIS Login</h2>
+        <h2>Login Form</h2>
     </fieldset>
     <fieldset style=" border-radius:5px 0px 5px 0px;">
        
@@ -25,7 +25,7 @@ $token = str_shuffle('abcdefghijklmnopqrstuvwxyz1234567890');
                     <label style="font-family:verdana; font-size: 13px">Username</label>
                 </td>
                 <td>
-                    <input type="text" name="username" value="" size="15" class="textfield">
+                    <input type="text" name="username" value="" size="15" class="textfield" placeholder="Username" required>
                 </td>
             </tr>
             <tr>
@@ -33,7 +33,7 @@ $token = str_shuffle('abcdefghijklmnopqrstuvwxyz1234567890');
                     <label style="font-family:verdana; font-size: 13px">Password</label>
                 </td>
                 <td>
-                    <input type="password" name="password" value="" size="15" class="textfield">
+                    <input type="password" name="password" value="" size="15" class="textfield" placeholder="Password">
                 </td>
             </tr>
             <tr>

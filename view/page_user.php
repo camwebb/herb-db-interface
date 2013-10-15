@@ -17,7 +17,7 @@
 				<tr>
 					
 					<td width="100" align="right">
-						Username :
+						Login As :
 					</td>
 					<td width="200">
 						<?php echo $_SESSION['userName']; ?>
@@ -29,15 +29,15 @@
 					</td>
 					<td>
 						<?php 
-						if ($_SESSION['userLevel'] ==1) echo 'System Administrator';else
-						if ($_SESSION['userLevel'] == 2) echo 'Network Manager'; else
-						if ($_SESSION['userLevel'] == 3) echo 'Database Manager'; else
-						if ($_SESSION['userLevel'] == 4) echo 'Collection Manager'; else
-						if ($_SESSION['userLevel'] == 5) echo 'Data Validator'; else
-						if ($_SESSION['userLevel'] == 6) echo 'Data Accurator'; else
-						if ($_SESSION['userLevel'] == 7) echo 'Data Entry Operator'; else
+						if ($_SESSION['userLevel'] ==1) echo 'System Administrator';
+						if ($_SESSION['userLevel'] == 2) echo 'Network Manager'; 
+						if ($_SESSION['userLevel'] == 3) echo 'Database Manager'; 
+						if ($_SESSION['userLevel'] == 4) echo 'Collection Manager'; 
+						if ($_SESSION['userLevel'] == 5) echo 'Data Validator'; 
+						if ($_SESSION['userLevel'] == 6) echo 'Data Accurator'; 
+						if ($_SESSION['userLevel'] == 7) echo 'Data Entry Operator'; 
 						if ($_SESSION['userLevel'] == 8) echo 'Guest';
-						
+						//pr($_SESSION);
 						?>
 					</td>
 				</tr>

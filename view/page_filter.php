@@ -29,13 +29,19 @@
 							'data_4' => $_POST['data_4'],
 							);
 		
-		list ($rec, $specimenID) = get_data_from_table($get_record);
+		//list ($rec, $specimenID) = get_data_from_table($get_record);
 		
-		$_SESSION['specimenID_Filter'] = $specimenID;
+		$dataArr = get_data_from_table($get_record);
 		
-		//print_r($specimenID);
+		//pr($dataArr);
 		
-		if($rec > 0) echo '<script>window.onload = function (){alert ("'.$rec.' Data Ditemukan") ; window.location="./?page=specimen&id=1"}</script>';
+		
+		$_SESSION['specimenID_Filter'] = $dataArr[1];
+		
+		//pr($_SESSION);
+		//exit;
+		
+		if($dataArr[0] > 0) echo '<script>window.onload = function (){alert ("'.$dataArr[0].' Data Ditemukan") ; window.location="./?page=specimen&id=1"}</script>';
 		else echo '<script>window.onload = function (){alert ("Data Tidak Ditemukan") ;window.location="./?page=filter"}</script>';
 		
 		
@@ -114,7 +120,7 @@
 									</td>
 									<td>
                                                                             
-										<select class="combobox" name='data_<?php echo $i?>' id='dataSelect_<?php echo $i?>' onChange="DinamisData(document.getElementById('dataSelect_<?php echo $i?>'),document.getElementById('<?php echo $i?>'))">
+										<select class="combobox" name='data_<?php echo $i?>' id='dataSelect_<?php echo $i?>' <!--onChange="DinamisData(document.getElementById('dataSelect_<?php echo $i?>'),document.getElementById('<?php echo $i?>'))"-->>
 											
 										</select>
                                                                                 

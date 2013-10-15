@@ -5,17 +5,18 @@ defined('_IBIS') or die ('Forbidden Access');
 <div style="width:100%;">
 	<div style="width:25%; border-style:none; float:left; margin-right:10px;" align="center">
 		<fieldset>
-			<legend><span style="font-size:12px;">Print Single Data</span></legend>
-				<a href="JavaScript:window.print();"><img src="img/icon/printer.png" width="80px" height="90px"/></a><br>
-				<a <?php //if (!empty($_SESSION['specimenID_Filter'])) ?>href="./view/download_report.php?id=<?php echo $_SESSION['specimenID_Filter'][$_GET['id']-1]; ?>" target="main"><img src="img/icon/pdf.png" width="80px" height="90px"/></a>
+			<legend><span style="font-size:12px; font-weight:bold">Print To PDF</span></legend>
+				<!--<a href="JavaScript:window.print();"><img src="img/icon/printer.png" width="80px" height="90px"/></a><br>-->
+				<a <?php //if (!empty($_SESSION['specimenID_Filter'])) ?>href="./view/download_report.php?id=<?php echo $_SESSION['ID_Specimen'];//$_SESSION['specimenID_Filter'][$_GET['id']-1]; ?>" target="main"><img src="img/icon/pdf.png" width="80px" height="90px"/></a>
 		</fieldset>
 		<br>
+		<!--
 		<fieldset>
 			<legend><span style="font-size:12px;">Print Multiple Data</span></legend>
 				<a href="JavaScript:window.print();"><img src="img/icon/printer.png" width="80px" height="90px"/></a><br>
 				<a href=""><img src="img/icon/pdf.png" width="80px" height="90px"/></a>
 		</fieldset>
-		
+		-->
 	</div>
 	<div style="float:left; width:60%; border-style:none; background-color:#fff" align="right">
 		<div style="">
@@ -25,7 +26,7 @@ defined('_IBIS') or die ('Forbidden Access');
 				<fieldset style="border-width:3px;">
 					<table border="0" align="center">
 						<tr>
-							<td style="padding:5px;" align="center"><h4>Herbarium Bogoriense</h4>PUSLIT BIOLOGI - LIPI INDONESIA<hr></td>	
+							<td style="padding:5px;" align="center"><h4>Herbarium Dummy Report</h4>Testing Report - Generate By MPDF<hr></td>	
 					</tr>
 
 						<tr>
@@ -61,38 +62,38 @@ defined('_IBIS') or die ('Forbidden Access');
 						</tr>
 					</table><hr>
 
-					<table border="0" width="100%">
+					<table border="0" width="100%" style="border-collapse:collapse">
 						<tr>
 							<td width="25%" valign="top"><span style="font-size:12px;">Collector(s)</span></td>
 							<td width="1px" valign="top">:</td>
-							<td width="40%"><span style="font-size:12px;"><?php echo $Collector_Name; ?></span></td>
+							<td width="" colspan="2"><span style="font-size:12px;"><?php echo $Collector_Name; ?></span></td>
 						</tr>
 						<tr>
 							<td><span style="font-size:12px;">No.</span></td>
 							<td>:</td>
 							<td><?php echo $Collector_Field_Number; ?></td>
-							<td><span style="font-size:12px;">Date : <?php echo $Coll_Date_From; ?></span></td>
+							<td align="right"><span style="font-size:12px;">Date : <?php echo $Coll_Date_From; ?></span></td>
 						</tr>
 						<tr>
 							<td><span style="font-size:12px;">Local Name</span></td>
 							<td>:</td>
-							<td><span style="font-size:12px;">-</span></td>
+							<td colspan="2"><span style="font-size:12px;">-</span></td>
 						</tr>
 						<tr>
-							<td><span style="font-size:12px;">Habit</span></td>
-							<td>:</td>
-							<td><span style="font-size:12px;"><?php echo $Habit_Detail; ?></span></td>
+							<td valign="top"><span style="font-size:12px;">Habit</span></td>
+							<td valign="top">:</td>
+							<td colspan="2"><span style="font-size:12px;"><?php echo $Habit_Detail; ?></span></td>
 						</tr>
 						<tr>
 							<td><span style="font-size:12px;">Uses</span></td>
 							<td>:</td>
-							<td><span style="font-size:12px;">-</span></td>
+							<td colspan="2"><span style="font-size:12px;">-</span></td>
 						</tr>
 						<tr>
 							<td><span style="font-size:12px;">Determined By</span></td>
 							<td>:</td>
 							<td><span style="font-size:12px;"><?php ?></span></td>
-							<td><span style="font-size:12px;">Date :</span></td>
+							<td align="right"><span style="font-size:12px;">Date :</span></td>
 						</tr>
 					</table>
 					<hr>	

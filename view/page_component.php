@@ -2,13 +2,14 @@
 
 if (isset($_POST[$randomSave]) or ($_POST[$randomUpdate])){
 	
-	if (!empty($_POST['Current_Determination_Flag'])) $Current_Determination_Flag = $_POST['Current_Determination_Flag']; else $Current_Determination_Flag = $_POST['Current_Determination_Flag'] = 'null';
-	if (!empty($_POST['Species_Code'])) $Species_Code = $_POST['Species_Code']; else $Species_Code = $_POST['Species_Code'] = 'null';
-	if (!empty($_POST['Genus_Code'])) $Genus_Code = $_POST['Genus_Code']; else $Genus_Code = $_POST['Genus_Code'] = 'null';
-	if (!empty($_POST['Species_Author_Code'])) $Species_Author_Code = $_POST['Species_Author_Code']; else $Species_Author_Code = $_POST['Species_Author_Code'] = 'null';
+	if (!empty($_SESSION['ID_Component'])) $ID_Component = $_SESSION['ID_Component']; else $ID_Component = 'null';
+	if (!empty($_POST['Current_Determination_Flag'])) $Current_Determination_Flag = $_POST['Current_Determination_Flag']; else $Current_Determination_Flag = 'null';
+	if (!empty($_POST['Species_Code'])) $Species_Code = $_POST['Species_Code']; else $Species_Code = 'null';
+	if (!empty($_POST['Genus_Code'])) $Genus_Code = $_POST['Genus_Code']; else $Genus_Code = 'null';
+	if (!empty($_POST['Species_Author_Code'])) $Species_Author_Code = $_POST['Species_Author_Code']; else $Species_Author_Code = 'null';
 	$dataSpecimen = array 
 						(
-							'table_name' => 'Component',
+							'table_name' => array('Component' => 'Component', 'Other_Number' => 'Other_Number'),
 							'field_name' => array (
 													'ID_Specimen' 			=> 'ID_Specimen',
 													'Collector_Field_Number'=> 'Collector_Field_Number',
@@ -18,18 +19,21 @@ if (isset($_POST[$randomSave]) or ($_POST[$randomUpdate])){
 													'ID_Component' 			=> 'ID_Component',
 													'BO_Number' 			=> 'BO_Number',
 													'Component_Class_Code' 	=> 'Component_Class_Code',
-													'Notes' 				=> 'Notes',
+													'Component_Comment'		=> 'Component_Comment',
+													'Other_Number' 			=> 'Other_Number',
 													'Data_Value'			=> 'Data_Value'
 												  ),
 												  
 							'field_data' => array (
+													'ID_Component' 				=> trim(htmlspecialchars($ID_Component)),
 													'Collector_Field_Number' 	=> trim(htmlspecialchars($_POST['Collector_Field_Number'])),
 													'Collector_Name' 			=> trim(htmlspecialchars($_POST['Collector_Name'])),
 													'Coll_Date_From' 			=> trim(htmlspecialchars($_POST['Coll_Date_From'])),
 													'Coll_Date_To' 				=> trim(htmlspecialchars($_POST['Coll_Date_To'])),
 													'BO_Number' 				=> trim(htmlspecialchars($_POST['BO_Number'])),
 													'Component_Class_Code'		=> trim(htmlspecialchars($_POST['Component_Class_Code'])),
-													'Notes' 					=> trim(htmlspecialchars($_POST['Notes'])),
+													'Component_Comment' 		=> trim(htmlspecialchars($_POST['Component_Comment'])),
+													'Other_Number' 				=> trim(htmlspecialchars($_POST['Other_Number'])),
 													'Data_Value'				=> trim(htmlspecialchars($_POST['Data_Value']))
 												  ),
 							
@@ -39,12 +43,22 @@ if (isset($_POST[$randomSave]) or ($_POST[$randomUpdate])){
 	if ($_POST[$randomSave]){
 		insert_tab_component($dataSpecimen);
 	}else{
+		
 		update_tab_component($dataSpecimen);
 	}
 	
 	//masukkan data ke fungsi insert
 }
 
+
+if ($_SESSION['ID_Component'] !=''):
+$query = "SELECT * FROM Other_Number WHERE ID_Component = $_SESSION[ID_Component]";
+$result = mysql_query ($query) or die (error());
+$data = mysql_fetch_object($result);
+
+$Other_Number = $data->Other_Number;
+
+endif;
 ?>
 
 
@@ -64,7 +78,7 @@ if (isset($_POST[$randomSave]) or ($_POST[$randomUpdate])){
 					<tr>
 						<td align="right">Other Number </td>
 						<td>
-							<input type="text" name="textfield6" value="<?php echo $other_number;?>" />
+							<input type="text" name="Other_Number" value="<?php echo $Other_Number;?>" />
 						</td>
 					</tr>
 					<tr>
@@ -79,7 +93,7 @@ if (isset($_POST[$randomSave]) or ($_POST[$randomUpdate])){
 					<tr>
 						<td align="right">Notes</td>
 						<td>
-							<textarea name="Notes" cols="26" rows="5" class=""><?php echo $Notes;?></textarea>
+							<textarea name="Component_Comment" cols="26" rows="5" class=""><?php echo $Component_Comment;?></textarea>
 						</td>
 					</tr>
 				</table>

@@ -14,14 +14,12 @@
 	}
     
    
-   
-   
     ?>
        
         <div id="container">  
 			<div align="left" style="background-color:#d3e4f9; border-radius:5px 5px 0px 0px; margin-top:5px;">
                 <fieldset id="info_menu">
-					<span style="font-size:12px;"><?php echo $app['conf']['title']; ?></span>
+					<span style="font-size:12px;"><?php //echo $app['conf']['title']; ?></span>
                     <!--
                     Welcome <?php //echo $_SESSION['userName']; ?>,
                     <label><a href="logout.php"> Logout</a></label>
@@ -62,9 +60,10 @@
 					echo '<script type=text/javascript>alert ("Record tidak tersedia"); window.location="./?page=specimen&id=1"</script>';
 				}else{ 
 					
-					$query = "SELECT s.*, d.*, c.*, n.*, u.* FROM Specimen AS s 
-							 LEFT JOIN Determination AS d
-							 ON s.ID_Specimen = d.ID_Specimen 
+					$query = "SELECT s.*, 
+								c.ID_Component, c.BO_Number, c.Component_Class_Code, c.Component_Comment,
+								n.Local_Name, n.Language, 
+								u.Local_Use FROM Specimen AS s 
 							 LEFT JOIN Component AS c 
 							 ON s.ID_Specimen = c.ID_Specimen
 							 LEFT JOIN Local_Name As n
@@ -78,9 +77,19 @@
 				
 				//print_r($query);
 				$result = mysql_query($query) or die (mysql_error);
+				//$tes = mysql_fetch_object($result);
+				//pr($tes);
+				
+				//exit;
+				$dataArr_specimen = '';
 				while ($data = mysql_fetch_array($result)){
 					//header info
+					
+					/* Untuk debug data */
+					$dataArr_specimen = $data;
+					/* end debug data */
 					$ID_Specimen = $data['ID_Specimen'];
+					
 					$Collector_Name = $data['Collector_Name'];
 					$Collector_Field_Number =  $data['Collector_Field_Number'];
 					$Coll_Date_From = $data['Coll_Date_From'];
@@ -109,15 +118,19 @@
 					$Island_Name = $data['Island_Name'];
 					$Province_Code = $data['Province_Code'];
 					$District_Code = $data['District_Code'];
-					$Alt_From = $data['Alt_From'];
+					$Lat_From = $data['Lat_From'];
+					$Lon_From = $data['Lon_From'];
 					$NNP_Code = $data['NNP_Code'];
 					$NNP_Distance = $data['NNP_Distance'];
 					$NNP_Direction = $data['NNP_Direction'];
 					$Geocode_Source = $data['Geocode_Source'];
 					$Geocode_Method = $data['Geocode_Method'];
 					//tab determination
+					
 					$ID_Determination = $data['ID_Determination'];
+					
 					$Det_Date = $data['Det_Date'];
+					$Conf_Date = $data['Conf_Date'];
 					$Determination_Qualifier = $data['Determination_Qualifier'];
 					$Taxonomical_Validator_By = $data['Taxonomical_Validator_By'];
 					$Taxonomical_Confirmed_By = $data['Taxonomical_Confirmed_By'];
@@ -129,10 +142,11 @@
 					$Species_Code = $data['Species_Code'];
 					$Species_Author_Code = $data['Species_Author_Code'];
 					//tab component
+					
 					$ID_Component = $data['ID_Component'];
 					$BO_Number = $data['BO_Number'];
 					$Component_Class_Code = $data['Component_Class_Code'];
-					
+					$Component_Comment = $data['Component_Comment'];
 					//footer info
 					$Last_Edited_By = $data['Last_Edited_By'];
 					$Last_Connect_As = $data['Connect_As'];
@@ -141,7 +155,7 @@
 					//set session ID_Specimen, ID_Determination, ID_Component berdasarkan page id
 					
 					$_SESSION['ID_Specimen'] =  $_SESSION['specimenID_Filter'][(int)$_GET['id']-1];
-					$_SESSION['ID_Determination'] = $ID_Determination;
+					//$_SESSION['ID_Determination'] = $ID_Determination;
 					$_SESSION['ID_Component'] = $ID_Component;
 					
 					
@@ -159,12 +173,20 @@
 				
 
 				if (!empty ($Genus_Code)){
-					$query_genus = "SELECT * FROM Genus_Text WHERE ID = ".$Genus_Code;
+					$query_genus = "SELECT Genus FROM Genus WHERE Genus_ID = ".$Genus_Code;
 					//print_r($query_genus);
-					$result_genus = mysql_query($query_genus) or die (mysql_error);
+					$result_genus = mysql_query($query_genus) or die (error());
 					if (mysql_num_rows($result_family)){
+						
 						$data_genus = mysql_fetch_assoc($result_genus);
-						$Genus_Name = $data_genus['Genus'];
+						//$Genus_Name = $data_genus['Genus'];
+						$query_ = "SELECT Genus FROM Genus_Text WHERE ID = $data_genus[Genus] LIMIT 1";
+						//print_r($query_);
+						$result_ = mysql_query($query_) or die (error());
+						$data = mysql_fetch_object($result_);
+						
+						$Genus_Name = $data->Genus;
+						
 					}
 				}
 				
@@ -181,11 +203,13 @@
 				
 			}
 			
+			//pr($dataArr_specimen);
 			//insert data	
 			if (isset($_SESSION['ID_Specimen'])){
-				$query = "SELECT s.*, d.*, c.*, n.*, u.* FROM Specimen AS s 
-							 LEFT JOIN Determination AS d
-							 ON s.ID_Specimen = d.ID_Specimen 
+				$query = "SELECT s.*, 
+								c.ID_Component, c.BO_Number, c.Component_Class_Code, c.Component_Comment,
+								n.Local_Name, n.Language, 
+								u.Local_Use FROM Specimen AS s 
 							 LEFT JOIN Component AS c 
 							 ON s.ID_Specimen = c.ID_Specimen
 							 LEFT JOIN Local_Name As n
@@ -198,6 +222,8 @@
 				//print_r($query);
 				$result = mysql_query($query) or die (mysql_error);
 				while ($data = mysql_fetch_assoc($result)){
+					
+					
 					$ID_Specimen = $data['ID_Specimen'];
 					$Collector_Name = $data['Collector_Name'];
 					$Collector_Field_Number =  $data['Collector_Field_Number'];
@@ -249,7 +275,7 @@
 					//tab component
 					$BO_Number = $data['BO_Number'];
 					$Component_Class_Code = $data['Component_Class_Code'];
-					
+					$Component_Comment = $data['Component_Comment'];
 					//footer info
 					$Last_Edited_By = $data['Last_Edited_By'];
 					$Last_Connect_As = $data['Connect_As'];
