@@ -104,14 +104,14 @@ function get_data_from_table($dataRecord){
 										include $app['path']['config_path'].'compare_replace.php';
 										
 										$varFieldQuery[$i] = "SELECT * FROM view_field WHERE Field = '" .$dataRecord['field_'.$i]."'";
-										print_r($varFieldQuery[$i]);
+										//print_r($varFieldQuery[$i]);
 										$varFieldResult[$i] = mysql_query($varFieldQuery[$i]) or die (mysql_error);
 										$varSum = mysql_num_rows($varFieldResult[$i]);
 										$varDataField[$i] = mysql_fetch_assoc($varFieldResult[$i]);
 										
 									endfor;
 									
-									print_r($dataRecord);
+									//print_r($dataRecord);
 									
 										
 										if (($dataRecord['field_0']!=='') and ($dataRecord['field_1']!=='') 
@@ -179,14 +179,14 @@ function get_data_from_table($dataRecord){
 									include $app['path']['config_path'].'compare_replace.php';
 									
 									$varFieldQuery[$i] = "SELECT * FROM view_field WHERE Field = '" .$dataRecord['field_'.$i]."'";
-									print_r($varFieldQuery[$i]);
+									//print_r($varFieldQuery[$i]);
 									$varFieldResult[$i] = mysql_query($varFieldQuery[$i]) or die (mysql_error);
 									$varSum = mysql_num_rows($varFieldResult[$i]);
 									$varDataField[$i] = mysql_fetch_assoc($varFieldResult[$i]);
 									
 								endfor;
 								
-								print_r($dataRecord);
+								//print_r($dataRecord);
 								
 									
 									if (($dataRecord['field_0']!=='') and ($dataRecord['field_1']!=='') 
@@ -251,7 +251,7 @@ function get_data_from_table($dataRecord){
 							
 							endfor;
 							
-							print_r($dataRecord);
+							//print_r($dataRecord);
 							
 								
 								if (($dataRecord['field_0']!=='') and ($dataRecord['field_1']!=='') 
@@ -305,14 +305,15 @@ function get_data_from_table($dataRecord){
 					include $app['path']['config_path'].'compare_replace.php';
 					
 					$varFieldQuery[$i] = "SELECT * FROM view_field WHERE Field = '" .$dataRecord['field_'.$i]."'";
-					print_r($varFieldQuery[$i]);
+					//print_r($varFieldQuery[$i]);
 					$varFieldResult[$i] = mysql_query($varFieldQuery[$i]) or die (mysql_error);
 					$varSum = mysql_num_rows($varFieldResult[$i]);
 					$varDataField[$i] = mysql_fetch_assoc($varFieldResult[$i]);
 					
 					endfor;
 					
-					print_r($dataRecord);
+					
+					//print_r($dataRecord);
 					
 						
 						if (($dataRecord['field_0']!=='') and ($dataRecord['field_1']!=='')){
@@ -590,22 +591,22 @@ function filter_triple($dataFilter){
 	$query = "SELECT * FROM Specimen AS s 
 			 ".$dataFilter['where_0']." 
 			 s.".$dataFilter['field_0']. " ".
-			 $dataFilter['condition_0']. " ".
-			 $dataFilter['data_0']. " ".
+			 $dataFilter['condition_0']. "".
+			 $dataFilter['data_0']. "".
 			 $dataFilter['persen_0']. " ".
 			 
 			 $dataFilter['operator_1']. " s.".
 			 
 			 $dataFilter['field_1']. " ".
-			 $dataFilter['condition_1']. " ".
-			 $dataFilter['data_1']. " ".
+			 $dataFilter['condition_1']. "".
+			 $dataFilter['data_1']. "".
 			 $dataFilter['persen_1']." ".
 			 
 			 $dataFilter['operator_2']. " s.".
 			
 			 $dataFilter['field_2']. " ".
-			 $dataFilter['condition_2']. " ".
-			 $dataFilter['data_2']." ".
+			 $dataFilter['condition_2']. "".
+			 $dataFilter['data_2']."".
 			 $dataFilter['persen_2'];
 	}else{ 
 		
@@ -657,9 +658,9 @@ function filter_double($dataFilter){
 	$query = "SELECT * FROM Specimen AS s 
 			 ".$dataFilter['where_0']." 
 			 s.".$dataFilter['field_0']. " ".
-			 $dataFilter['condition_0']. " ".
+			 $dataFilter['condition_0']. "".
 			 
-			 $dataFilter['data_0']. " ".
+			 $dataFilter['data_0']. "".
 			 $dataFilter['persen_0']. " ".
 			 $dataFilter['operator']. " s.".
 			 $dataFilter['field_1']. " ".
@@ -672,9 +673,9 @@ function filter_double($dataFilter){
 		$query = "SELECT * FROM ".$dataFilter['table_0']." AS s 
 			 ".$dataFilter['where_0']." 
 			 s.".$dataFilter['field_0']. " ".
-			 $dataFilter['condition_0']. " ".
+			 $dataFilter['condition_0']. "".
 			 
-			 $dataFilter['data_0']. " ".
+			 $dataFilter['data_0']. "".
 			 $dataFilter['persen_0']. " ".
 			 $dataFilter['operator']. "".
 			 "(s.ID_Specimen in (SELECT ID_Specimen FROM ".$dataFilter['table_1']." 
@@ -684,12 +685,13 @@ function filter_double($dataFilter){
 			 $dataFilter['persen_1']."))";
 			
 	}		 
-	//print_r($query);
+	
 	$result = mysql_query($query) or die (mysql_error);
-	$sumRec = mysql_num_rows($result); echo '</br>'.$sumRec;
+	$sumRec = mysql_num_rows($result); 
+	//echo '</br>'.$sumRec;
 	if ($sumRec){ 
 		while ($data = mysql_fetch_assoc($result)){
-			$specimenID = $data['ID_Specimen'];
+			$specimenID[] = $data['ID_Specimen'];
 		}
 	}else{ 
 		$sumRec = '';

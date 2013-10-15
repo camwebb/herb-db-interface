@@ -2,6 +2,8 @@
 defined('_IBIS') or die ('Forbidden Access');
 
 function insert_tab_specimen($dataSpecimen){
+	
+	
 	$query = "INSERT INTO ".$dataSpecimen['table_name']." 
 			 ( ".
 				$dataSpecimen['field_name']['ID_Specimen'].",".
@@ -39,7 +41,8 @@ function insert_tab_specimen($dataSpecimen){
 				". $dataSpecimen['field_data']['Type_Code'].",
 				". $dataSpecimen['field_data']['Data_Value']."
 			 )";
-	//print_r($query);		 
+	print_r($query);		 
+	
 	$result = mysql_query($query) or die (mysql_error);
 	$lastID = mysql_insert_id();
 	
@@ -71,6 +74,17 @@ function insert_tab_specimen($dataSpecimen){
 								
 							")";
 			$resultLocUse = mysql_query($queryLocUse) or die (mysql_error);
+			
+			
+			
+			$Collector = get_collector_data(array('Collector'=>$dataSpecimen['field_data']['Collector_Name']));
+			//var_dump($Collector);
+			if ($Collector == ''){
+				// insert data collector
+				//echo 'ada';
+				$insert = insert_collector_data(array('ID_Specimen'=>$lastID, 'Collector'=>$dataSpecimen['field_data']['Collector_Name']));
+			}
+			
 			//print_r($queryLocUse);
 			$_SESSION['ID_Specimen'] = $lastID;
 			echo '<script type=text/javascript>alert ("Data Sudah Masuk"); window.location="./?page=locality";</script>';
@@ -172,32 +186,108 @@ function insert_tab_determination($dataSpecimen){
 }
 
 function insert_tab_component($dataSpecimen){
-	$query = "INSERT INTO ".$dataSpecimen['table_name']." 
+	$query = "INSERT INTO ".$dataSpecimen['table_name']['Component']." 
 			 ( ".
-				$dataSpecimen['field_name']['ID_Component'].",".
-				$dataSpecimen['field_name']['ID_Specimen'].",".
-				$dataSpecimen['field_name']['BO_Number'].",".
-				$dataSpecimen['field_name']['Component_Class_Code'].
+				$dataSpecimen['field_name']['ID_Specimen']			." , ".
+				$dataSpecimen['field_name']['ID_Component']			." , ".
+				$dataSpecimen['field_name']['BO_Number']			." , ".
+				$dataSpecimen['field_name']['Component_Class_Code']	." , ".
+				$dataSpecimen['field_name']['Component_Comment']	." ) ".
 				
-			 ") 
-			 VALUES 
-			 (
-				null,
-				". $_SESSION['ID_Specimen'].",
-				'". $dataSpecimen['field_data']['BO_Number']."',
-				". $dataSpecimen['field_data']['Component_Class_Code']."
+			" VALUES (".
+				$_SESSION['ID_Specimen'].",".
+				$dataSpecimen['field_data']['ID_Component'].",
+				'".$dataSpecimen['field_data']['BO_Number']."',
+				".$dataSpecimen['field_data']['Component_Class_Code'].",'
+				".$dataSpecimen['field_data']['Component_Comment']."')";
 				
-			 )";
 	//print_r($query);		 
 	$result = mysql_query($query) or die (mysql_error);
 	$lastID = mysql_insert_id();
 	
+	$Other_Number = get_data_other_number(array('ID_Component' => $dataSpecimen['field_data']['ID_Component']));
+	if ($Other_Number !='')
+	{
+		$queryOtherNum = "UPDATE Other_Number SET ". 
+						$dataSpecimen['field_name']['Other_Number']	." = '".$dataSpecimen['field_data']['Other_Number']."'".
+						" WHERE ID_Component = ".$_SESSION['ID_Component'];
+	}
+	else
+	{
+		$queryOtherNum = "INSERT INTO Other_Number ( ". 
+						$dataSpecimen['field_name']['ID_Component'] .",".
+						$dataSpecimen['field_name']['Other_Number']	.") VALUES ( ".
+						$dataSpecimen['field_data']['ID_Component'].",'".
+						$dataSpecimen['field_data']['Other_Number']."')";
+						
+	}
+	//print_r($queryOtherNum);
+	$resultOtherNum = mysql_query($queryOtherNum) or die (mysql_error);
+	
+	
 	if ($result){
 			
 			$_SESSION['ID_Component'] = $lastID;
-			echo '<script type=text/javascript>alert ("Data Sudah Masuk"); window.location="./?page=specimen";</script>';
+			echo '<script type=text/javascript>alert ("Data Sudah Masuk"); window.location="./?page=component";</script>';
 		
 		
+	}
+}
+
+function get_collector_data($param)
+{
+	//$data_coll_explode = explode(',', $param['Collector']);
+	
+	//foreach ($data_coll_explode as $value) :
+		//$query = "SELECT ID_Collector FROM Collector WHERE Collector = '$param[Collector]' LIMIT 1";
+		$query = "SELECT ID FROM Reference_Collector WHERE Text = '$param[Collector]' LIMIT 1";
+		$result = mysql_query($query) or die (error());
+		$data = mysql_fetch_object($result);
+		
+		$dataArr = $data->ID;
+	//endforeach;
+	return $dataArr;
+}
+
+function insert_collector_data($param)
+{
+	$query_ = "INSERT INTO Reference_Collector (ID, Text) 
+				VALUES (null, '$param[Collector]')";
+	//print_r($query_);
+	$result_ = mysql_query($query_) or die (error());
+	if ($result_)
+	{
+		$query = "INSERT INTO Collector (ID_Specimen, ID_Collector, Collector) 
+					VALUES ($param[ID_Specimen], null, '$param[Collector]')";
+		//print_r($query);
+		$result = mysql_query($query) or die (error());
+		if ($result){
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+	
+}
+
+function insert_data_nnp($param)
+{
+	$query = "INSERT INTO xNNP (ID, Text) 
+				VALUES (null, '$param[NNP]')";
+	//print_r($query);
+	$result = mysql_query($query) or die (error());
+	if ($result){
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 ?>

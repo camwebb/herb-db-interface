@@ -7,16 +7,74 @@ function load_data_with_condition($table, $field1, $field2, $where, $data_condit
         echo "<option value =".$data->$field1.">".$data->$field2."</option>";
     }
 }
-
+/*
 function load_id($table, $field1, $field2, $selected){
-	
-    $query = "SELECT `$field1`, `$field2` FROM $table";//print_r($query);
+	print_r('adadadad');
+	exit;
+    $query = "SELECT $field1, $field2 FROM $table LIMIT 10";print_r($query);
     $result = mysql_query($query) or die (mysql_error());
     while ($data = mysql_fetch_object($result)){
+		if($data->$field2 !='') :
+		
 		?>
         <option value ="<?php echo $data->$field1; ?>" <?php if ($data->$field1 == $selected) echo 'Selected'; ?> ><?php echo $data->$field2; ?></option>
         <?php
+        endif;
     }
+}
+*/
+if (isset($_GET['token']))
+{
+	function load_data(){
+		
+		/* database static config */
+		//mysql_connect('localhost','root','root');
+		//mysql_select_db('db_herbarium');
+		
+		include '../config/database.php';
+		
+		$query = "SELECT ID, Text FROM xRank";
+		$result = mysql_query($query) or die (mysql_error());
+		while ($data = mysql_fetch_object($result))
+		{
+			$dataArr ['ID'][] = $data->ID;
+			$dataArr ['Text'][] = $data->Text;
+		}
+		
+		return $dataArr;
+	}
+	
+	$hasil = load_data();
+	
+	echo json_encode($hasil);
+}
+else if (isset($_GET['del'])){
+	function load_data($param){
+		
+		/* database static config */
+		//mysql_connect('localhost','root','root');
+		//mysql_select_db('db_herbarium');
+		
+		include '../config/database.php';
+		
+		if ($_GET['id'] !='')
+		{
+			$query = "DELETE FROM Rank WHERE Infraspecific_Rank = $param[id]";
+			print_r($query);
+			$result = mysql_query($query) or die (mysql_error());
+			if ($result)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		
+	}
+	
+	echo load_data(array('id'=>$_GET['id']));
 }
 
 //untuk query select Family pada tab determination

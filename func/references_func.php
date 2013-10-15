@@ -116,6 +116,7 @@ function check_login($data){
 			case '8':
 			{
 				$query = '';
+				
 			}
 			break;
 		} 
@@ -143,11 +144,12 @@ function check_login($data){
 			}
 		}else{
 			//guest
+			echo 'ada';
 			set_session_user(array (
 									'user_number' 	=>'8',
 									'user_name' 	=> 'guest',
 									'user_id' 		=> session_id(),
-									'user_level' 	=> 'guest',
+									'user_level' 	=> '8',
 									'user_rule' 	=> $user_rule,
 									'token'			=> $data['token'],
 									'login_time'	=> date('Y-m-d H:i:s')
@@ -192,5 +194,28 @@ function set_user_login_rule($data){
 	}else{
 		
 	}
+}
+
+function load_data_with_condition($table, $field1, $field2, $where, $data_condition){
+    $query = "SELECT `$field1`,`$field2` FROM $table WHERE $where = $data_condition";//print_r($query);
+    $result = mysql_query($query) or die (mysql_error());
+    while ($data = mysql_fetch_object($result)){
+        echo "<option value =".$data->$field1.">".$data->$field2."</option>";
+    }
+}
+
+// load combobox value
+function load_id($table, $field1, $field2, $selected){
+	
+    $query = "SELECT `$field1`, `$field2` FROM $table";//print_r($query);
+    $result = mysql_query($query) or die (mysql_error());
+    while ($data = mysql_fetch_object($result)){
+		if ($data->$field2 !='') :
+		
+		?>
+        <option value ="<?php echo $data->$field1; ?>" <?php if ($data->$field1 == $selected) echo 'Selected'; ?> ><?php echo $data->$field2; ?></option>
+        <?php
+        endif;
+    }
 }
 ?>
