@@ -14,7 +14,7 @@ $jumField = mysql_num_fields($result);
 if ($jumField){
 
 
-    echo "<?xml version='1.0'?>";
+    echo "<?xml version='1.0' encoding='UTF-8'?>";
     echo "<table>";
     echo "<".$namaTabel.">";
         for ($i=0; $i<=$jumField-1; $i++){
